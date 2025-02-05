@@ -17,5 +17,5 @@ return RectorConfig::configure()
         instanceOf: true,
         naming: true
     )
-    ->withImportNames(removeUnusedImports: true)
+    ->withImportNames()
     ->withSkip(['*/scoper.php', '*/Source/*', '*/Fixture/*']);

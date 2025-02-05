@@ -1,20 +1,17 @@
 {
-    "name": "rector/swiss-knife",
-    "description": "Swiss knife in pocket of every upgrade architect",
+    "name": "behastan/behastan",
+    "description": "Modern Static analysis for Behat tests",
     "license": "MIT",
     "bin": [
-        "bin/swiss-knife"
+        "bin/behastan"
     ],
     "require": {
         "php": ">=8.2",
-        "composer/semver": "^3.4",
-        "illuminate/container": "^11.38",
-        "nette/robot-loader": "^4.0",
+        "illuminate/container": "^11.41",
         "nette/utils": "^4.0",
         "nikic/php-parser": "^5.4",
         "symfony/console": "^6.4",
         "symfony/finder": "^6.4",
-        "symfony/yaml": "^7.2",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
@@ -23,16 +20,14 @@
         "phpunit/phpunit": "^11.5",
         "rector/rector": "^2.0",
         "shipmonk/composer-dependency-analyser": "^1.8",
-        "symfony/config": "^5.3|^6.4",
-        "symfony/dependency-injection": "^5.3|^6.4",
-        "symplify/easy-coding-standard": "^12.5",
+        "phpecs/phpecs": "^2.0",
         "symplify/vendor-patches": "^11.3",
         "tomasvotruba/class-leak": "^2.0",
         "tracy/tracy": "^2.10"
     },
     "autoload": {
         "psr-4": {
-            "Rector\\SwissKnife\\": "src"
+            "Behastan\\": "src"
         },
         "classmap": [
             "stubs"
@@ -40,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\SwissKnife\\Tests\\": "tests"
+            "Behastan\\Tests\\": "tests"
         }
     },
     "replace": {

@@ -45,8 +45,8 @@ ls -l $RESULT_DIRECTORY
 note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --classmap-authoritative --no-dev
 
-# make bin/swiss-knife runnable without "php"
-chmod 777 "$RESULT_DIRECTORY/bin/swiss-knife"
-chmod 777 "$RESULT_DIRECTORY/bin/swiss-knife.php"
+# make bin/behastan runnable without "php"
+chmod 777 "$RESULT_DIRECTORY/bin/behastan"
+chmod 777 "$RESULT_DIRECTORY/bin/behastan.php"
 
 note "Finished"

@@ -12,7 +12,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php_version: ['7.4', '8.0', '8.1']
+                php_version: ['7.4', '8.0', '8.2']
 
         steps:
             -   uses: shivammathur/setup-php@v2
@@ -20,4 +20,4 @@ jobs:
                     php-version: ${{ matrix.php }}
                     coverage: none
 
-            -   run: composer require rector/swiss-knife --dev --ansi
+            -   run: composer require behastan/behastan --dev --ansi

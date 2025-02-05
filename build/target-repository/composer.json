@@ -1,16 +1,16 @@
 {
-    "name": "rector/swiss-knife",
-    "description": "Swiss knife in pocket of every upgrade architect",
+    "name": "behastan/behastan",
+    "description": "Modern Static analysis for Behat tests",
     "license": "MIT",
     "require": {
         "php": ">=7.2"
     },
     "bin": [
-        "bin/swiss-knife"
+        "bin/behastan"
     ],
     "autoload": {
         "psr-4": {
-            "Rector\\SwissKnife\\": "src"
+            "Behastan\\": "src"
         }
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SwissKnife\DependencyInjection;
+namespace Behastan\DependencyInjection;
 
 use Illuminate\Container\Container;
 use PhpParser\Parser;
@@ -25,7 +25,7 @@ final class ContainerFactory
 
         // console
         $container->singleton(Application::class, function (Container $container): Application {
-            $application = new Application('Rector Swiss Knife');
+            $application = new Application('Behastan');
 
             $commandClasses = $this->findCommandClasses();
 
@@ -44,7 +44,7 @@ final class ContainerFactory
         // parser
         $container->singleton(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
-            return $phpParserFactory->createForNewestSupportedVersion();
+            return $phpParserFactory->createForHostVersion();
         });
 
         $container->singleton(
@@ -77,7 +77,7 @@ final class ContainerFactory
 
         $commandClasses = [];
         foreach ($commandFinder as $commandFile) {
-            $commandClass = 'Rector\\SwissKnife\\Command\\' . $commandFile->getBasename('.php');
+            $commandClass = 'Behastan\\Command\\' . $commandFile->getBasename('.php');
 
             // make sure it exists
             Assert::classExists($commandClass);

@@ -20,4 +20,4 @@ jobs:
                     php-version: ${{ matrix.php_version }}
                     coverage: none
 
-            -   run: php bin/swiss-knife list --ansi
+            -   run: php bin/behastan list --ansi

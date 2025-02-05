@@ -41,7 +41,7 @@ note "Dumping Composer Autoload"
 composer dump-autoload --ansi --classmap-authoritative --no-dev
 
 # make bin/ecs runnable without "php"
-chmod 777 "bin/swiss-knife"
-chmod 777 "bin/swiss-knife.php"
+chmod 777 "bin/behastan"
+chmod 777 "bin/behastan.php"
 
 note "Finished"
