@@ -10,7 +10,8 @@ final readonly class ClassMethodContextDefinition
         private string $filePath,
         private string $class,
         private string $methodName,
-        private string $mask
+        private string $mask,
+        private ?int $methodLine = null
     ) {
     }
 
@@ -32,5 +33,10 @@ final readonly class ClassMethodContextDefinition
     public function getMask(): string
     {
         return $this->mask;
+    }
+
+    public function getMethodLine(): ?int
+    {
+        return $this->methodLine;
     }
 }
