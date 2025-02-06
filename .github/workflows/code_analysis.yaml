@@ -9,7 +9,6 @@ on:
 jobs:
     code_analysis:
         strategy:
-            fail-fast: false
             matrix:
                 actions:
                     -
@@ -35,10 +34,6 @@ jobs:
                     -
                         name: 'Check Active Classes'
                         run: vendor/bin/class-leak check bin src --ansi
-
-                    -
-                        name: 'Unusued check'
-                        run: vendor/bin/composer-dependency-analyser
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
