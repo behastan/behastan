@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Behastan\DependencyInjection;
 
-use Illuminate\Container\Container;
-use PhpParser\Parser;
-use PhpParser\ParserFactory;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
-use Webmozart\Assert\Assert;
-
+use Behastan202502\Illuminate\Container\Container;
+use Behastan202502\PhpParser\Parser;
+use Behastan202502\PhpParser\ParserFactory;
+use Behastan202502\Symfony\Component\Console\Application;
+use Behastan202502\Symfony\Component\Console\Input\ArrayInput;
+use Behastan202502\Symfony\Component\Console\Output\ConsoleOutput;
+use Behastan202502\Symfony\Component\Console\Style\SymfonyStyle;
+use Behastan202502\Symfony\Component\Finder\Finder;
+use Behastan202502\Webmozart\Assert\Assert;
 final class ContainerFactory
 {
     /**
@@ -22,69 +20,48 @@ final class ContainerFactory
     public function create(): Container
     {
         $container = new Container();
-
         // console
         $container->singleton(Application::class, function (Container $container): Application {
             $application = new Application('Behastan');
-
             $commandClasses = $this->findCommandClasses();
-
             // register commands
             foreach ($commandClasses as $commandClass) {
                 $command = $container->make($commandClass);
                 $application->add($command);
             }
-
             // remove basic command to make output clear
             $this->hideDefaultCommands($application);
-
             return $application;
         });
-
         // parser
         $container->singleton(Parser::class, static function (): Parser {
             $phpParserFactory = new ParserFactory();
             return $phpParserFactory->createForHostVersion();
         });
-
-        $container->singleton(
-            SymfonyStyle::class,
-            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput())
-        );
-
+        $container->singleton(SymfonyStyle::class, static function (): SymfonyStyle {
+            return new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
+        });
         return $container;
     }
-
     public function hideDefaultCommands(Application $application): void
     {
-        $application->get('list')
-            ->setHidden(true);
-        $application->get('completion')
-            ->setHidden(true);
-        $application->get('help')
-            ->setHidden(true);
+        $application->get('list')->setHidden(\true);
+        $application->get('completion')->setHidden(\true);
+        $application->get('help')->setHidden(\true);
     }
-
     /**
      * @return string[]
      */
     private function findCommandClasses(): array
     {
-        $commandFinder = Finder::create()
-            ->files()
-            ->name('*Command.php')
-            ->in(__DIR__ . '/../Command');
-
+        $commandFinder = Finder::create()->files()->name('*Command.php')->in(__DIR__ . '/../Command');
         $commandClasses = [];
         foreach ($commandFinder as $commandFile) {
-            $commandClass = 'Behastan\\Command\\' . $commandFile->getBasename('.php');
-
+            $commandClass = 'Behastan\Command\\' . $commandFile->getBasename('.php');
             // make sure it exists
             Assert::classExists($commandClass);
-
             $commandClasses[] = $commandClass;
         }
-
         return $commandClasses;
     }
 }

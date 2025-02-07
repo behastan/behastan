@@ -2,65 +2,15 @@
     "name": "behastan/behastan",
     "description": "Modern Static analysis for Behat tests",
     "license": "MIT",
+    "require": {
+        "php": ">=7.2"
+    },
     "bin": [
         "bin/behastan"
     ],
-    "require": {
-        "php": ">=8.2",
-        "illuminate/container": "^11.41",
-        "nette/utils": "^4.0",
-        "nikic/php-parser": "^5.4",
-        "symfony/console": "^6.4",
-        "symfony/finder": "^6.4",
-        "webmozart/assert": "^1.11"
-    },
-    "require-dev": {
-        "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan": "^2.0",
-        "phpunit/phpunit": "^11.5",
-        "rector/rector": "^2.0",
-        "phpecs/phpecs": "^2.0",
-        "symplify/vendor-patches": "^11.3",
-        "tomasvotruba/class-leak": "^2.0",
-        "tracy/tracy": "^2.10"
-    },
     "autoload": {
         "psr-4": {
             "Behastan\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Behastan\\Tests\\": "tests"
-        },
-        "classmap": [
-            "stubs"
-        ]
-    },
-    "replace": {
-        "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-intl-normalizer": "*",
-        "symfony/polyfill-mbstring": "*"
-    },
-    "config": {
-        "sort-packages": true,
-        "platform-check": false,
-        "allow-plugins": {
-            "cweagans/composer-patches": true,
-            "phpstan/extension-installer": true
-        }
-    },
-    "scripts": {
-        "check-cs": "vendor/bin/ecs check --ansi",
-        "fix-cs": "vendor/bin/ecs check --fix --ansi",
-        "phpstan": "vendor/bin/phpstan analyse --ansi",
-        "rector": "vendor/bin/rector process --ansi"
-    },
-    "extra": {
-        "patches": {
-            "symfony/console": [
-                "patches/symfony-console-helper-helper-php.patch"
-            ]
         }
     }
 }

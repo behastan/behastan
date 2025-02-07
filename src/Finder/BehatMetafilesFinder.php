@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Behastan\Finder;
 
-use Symfony\Component\Finder\Finder;
+use Behastan202502\Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Webmozart\Assert\Assert;
-
+use Behastan202502\Webmozart\Assert\Assert;
 final class BehatMetafilesFinder
 {
     /**
@@ -18,15 +16,9 @@ final class BehatMetafilesFinder
     {
         Assert::allString($directories);
         Assert::allDirectory($directories);
-
-        $filesFinder = Finder::create()
-            ->files()
-            ->name('*Context.php')
-            ->in($directories);
-
+        $filesFinder = Finder::create()->files()->name('*Context.php')->in($directories);
         return iterator_to_array($filesFinder->getIterator());
     }
-
     /**
      * @param string[] $directories
      *
@@ -36,12 +28,7 @@ final class BehatMetafilesFinder
     {
         Assert::allString($directories);
         Assert::allDirectory($directories);
-
-        $filesFinder = Finder::create()
-            ->files()
-            ->name('*.feature')
-            ->in($directories);
-
+        $filesFinder = Finder::create()->files()->name('*.feature')->in($directories);
         return iterator_to_array($filesFinder->getIterator());
     }
 }
