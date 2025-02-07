@@ -4,34 +4,27 @@ declare(strict_types=1);
 
 namespace Behastan;
 
+use Behastan\PhpParser\SimplePhpParser;
+use Behastan\Resolver\ClassMethodMasksResolver;
 use Behastan\ValueObject\ClassMethodContextDefinition;
 use Behastan\ValueObject\Mask\ExactMask;
 use Behastan\ValueObject\Mask\NamedMask;
 use Behastan\ValueObject\Mask\RegexMask;
 use Behastan\ValueObject\Mask\SkippedMask;
 use Behastan\ValueObject\MaskCollection;
-use PhpParser\Comment\Doc;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\ParserFactory;
 use SplFileInfo;
 
 final class DefinitionMasksResolver
 {
-    /**
-     * @var string
-     */
-    private const INSTRUCTION_DOCBLOCK_REGEX = '#\@(Given|Then|When)\s+(?<instruction>.*?)\n#m';
-
-    /**
-     * @var string[]
-     */
-    private const ATTRIBUTE_NAMES = ['Behat\Step\Then', 'Behat\Step\Given', 'Behat\Step\And'];
+    public function __construct(
+        private readonly SimplePhpParser $simplePhpParser,
+        private readonly NodeFinder $nodeFinder,
+        private readonly ClassMethodMasksResolver $classMethodMasksResolver,
+    ) {
+    }
 
     /**
      * @param SplFileInfo[] $contextFiles
@@ -94,97 +87,42 @@ final class DefinitionMasksResolver
 
     /**
      * @param SplFileInfo[] $fileInfos
-     *
      * @return ClassMethodContextDefinition[]
      */
     private function resolveMasksFromFiles(array $fileInfos): array
     {
         $classMethodContextDefinitions = [];
 
-        $parserFactory = new ParserFactory();
-        $nodeFinder = new NodeFinder();
-
-        $phpParser = $parserFactory->createForHostVersion();
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NameResolver());
-
         foreach ($fileInfos as $fileInfo) {
-            /** @var string $fileContents */
-            $fileContents = file_get_contents($fileInfo->getRealPath());
-
-            /** @var Stmt[] $stmts */
-            $stmts = $phpParser->parse($fileContents);
-            $nodeTraverser->traverse($stmts);
+            $stmts = $this->simplePhpParser->parseFilePath($fileInfo->getRealPath());
 
             // 1. get class name
-            $class = $nodeFinder->findFirstInstanceOf($stmts, Class_::class);
+            $class = $this->nodeFinder->findFirstInstanceOf($stmts, Class_::class);
             if (! $class instanceof Class_) {
                 continue;
             }
 
-            if ($class->isAnonymous()) {
-                continue;
-            }
-
-            if (! $class->namespacedName instanceof Name) {
+            // is magic class?
+            if ($class->isAnonymous() || ! $class->namespacedName instanceof Name) {
                 continue;
             }
 
             $className = $class->namespacedName->toString();
 
             foreach ($class->getMethods() as $classMethod) {
-                $methodName = $classMethod->name->toString();
+                $rawMasks = $this->classMethodMasksResolver->resolve($classMethod);
 
-                // 1. collect from docblock
-                if ($classMethod->getDocComment() instanceof Doc) {
-                    preg_match_all(self::INSTRUCTION_DOCBLOCK_REGEX, $classMethod->getDocComment()->getText(), $match);
-
-                    foreach ($match['instruction'] as $instruction) {
-                        $mask = $this->clearMask($instruction);
-
-                        $classMethodContextDefinitions[] = new ClassMethodContextDefinition(
-                            $fileInfo->getRealPath(),
-                            $className,
-                            $methodName,
-                            $mask
-                        );
-                    }
-                }
-
-                // 2. collect from attributes
-                foreach ($classMethod->attrGroups as $attrGroup) {
-                    foreach ($attrGroup->attrs as $attr) {
-                        $attributeName = $attr->name->toString();
-                        if (! in_array($attributeName, self::ATTRIBUTE_NAMES)) {
-                            continue;
-                        }
-
-                        $firstArgValue = $attr->args[0]->value;
-
-                        if (! $firstArgValue instanceof String_) {
-                            continue;
-                        }
-
-                        $classMethodContextDefinitions[] = new ClassMethodContextDefinition(
-                            $fileInfo->getRealPath(),
-                            $className,
-                            $methodName,
-                            $firstArgValue->value
-                        );
-                    }
+                foreach ($rawMasks as $rawMask) {
+                    $classMethodContextDefinitions[] = new ClassMethodContextDefinition(
+                        $fileInfo->getRealPath(),
+                        $className,
+                        $classMethod->name->toString(),
+                        $rawMask
+                    );
                 }
             }
         }
 
         return $classMethodContextDefinitions;
-    }
-
-    private function clearMask(string $mask): string
-    {
-        $mask = trim($mask);
-
-        // clear extra quote escaping that would cause miss-match with feature masks
-        $mask = str_replace('\\\'', "'", $mask);
-        return str_replace('\\/', '/', $mask);
     }
 }
