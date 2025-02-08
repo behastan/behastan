@@ -113,13 +113,13 @@ final class DuplicatedDefinitionsCommand extends Command
             foreach ($classAndMethods as $classMethodContextDefinition) {
                 /** @var ClassMethodContextDefinition $classMethodContextDefinition */
                 $this->symfonyStyle->writeln(
-                    ' * ' . $classMethodContextDefinition->getClass() . '::' . $classMethodContextDefinition->getMethodName()
+                    ' * ' . $classMethodContextDefinition->getClass() . '::' . $classMethodContextDefinition->getMethodName() . ' in '
                 );
                 $this->symfonyStyle->writeln(
-                    'in ' . $classMethodContextDefinition->getFilePath() . ':' . $classMethodContextDefinition->getMethodLine()
+                    $classMethodContextDefinition->getFilePath() . ':' . $classMethodContextDefinition->getMethodLine()
                 );
 
-                $this->symfonyStyle->writeln('Mask: ' . $classMethodContextDefinition->getMask());
+                $this->symfonyStyle->writeln('Mask: <fg=green>' . $classMethodContextDefinition->getMask() . '</>');
                 $this->symfonyStyle->newLine();
             }
         }

@@ -16,8 +16,11 @@ composer require behastan/behastan --dev
 
 ## 1. Find duplicated definitions
 
-...
-@todo
+Some definitions have very similar masks, but even identical contents. Better use a one definitions with exact mask, to make your tests more precise and easier to maintain:
+
+```bash
+vendor/bin/behastan duplicated-definitions tests
+```
 
 
 <br>
