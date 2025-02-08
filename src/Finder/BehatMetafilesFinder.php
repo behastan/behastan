@@ -29,7 +29,6 @@ final class BehatMetafilesFinder
 
     /**
      * @param string[] $directories
-     *
      * @return SplFileInfo[]
      */
     public static function findFeatureFiles(array $directories): array

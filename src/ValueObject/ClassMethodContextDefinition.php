@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Behastan\ValueObject;
 
-final readonly class ClassMethodContextDefinition
+final class ClassMethodContextDefinition
 {
+    private int $usageCount = 0;
+
     public function __construct(
-        private string $filePath,
-        private string $class,
-        private string $methodName,
-        private string $mask,
-        private ?int $methodLine = null
+        private readonly string $filePath,
+        private readonly string $class,
+        private readonly string $methodName,
+        private readonly string $mask,
+        private readonly ?int $methodLine = null
     ) {
     }
 
@@ -38,5 +40,25 @@ final readonly class ClassMethodContextDefinition
     public function getMethodLine(): ?int
     {
         return $this->methodLine;
+    }
+
+    /**
+     * @param string[] $featureInstructions
+     */
+    public function recordUsage(array $featureInstructions): void
+    {
+        $usageCount = 0;
+        foreach ($featureInstructions as $featureInstruction) {
+            if ($this->mask === $featureInstruction) {
+                ++$usageCount;
+            }
+        }
+
+        $this->usageCount = $usageCount;
+    }
+
+    public function getUsageCount(): int
+    {
+        return $this->usageCount;
     }
 }

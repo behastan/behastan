@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Behastan\Analyzer;
 
 use Behastan\DefinitionMasksResolver;
+use Behastan\Reporting\MaskCollectionStatsPrinter;
 use Behastan\UsedInstructionResolver;
 use Behastan\ValueObject\Mask\AbstractMask;
 use Behastan\ValueObject\Mask\ExactMask;
 use Behastan\ValueObject\Mask\NamedMask;
 use Behastan\ValueObject\Mask\RegexMask;
 use Behastan\ValueObject\Mask\SkippedMask;
-use Behastan\ValueObject\MaskCollection;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
@@ -21,7 +21,8 @@ final readonly class UnusedDefinitionsAnalyzer
     public function __construct(
         private SymfonyStyle $symfonyStyle,
         private DefinitionMasksResolver $definitionMasksResolver,
-        private UsedInstructionResolver $usedInstructionResolver
+        private UsedInstructionResolver $usedInstructionResolver,
+        private MaskCollectionStatsPrinter $maskCollectionStatsPrinter,
     ) {
     }
 
@@ -34,7 +35,7 @@ final readonly class UnusedDefinitionsAnalyzer
     public function analyse(array $contextFiles, array $featureFiles): array
     {
         $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
-        $this->printStats($maskCollection);
+        $this->maskCollectionStatsPrinter->printStats($maskCollection);
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
 
@@ -56,28 +57,6 @@ final readonly class UnusedDefinitionsAnalyzer
         return $unusedMasks;
     }
 
-    private function printStats(MaskCollection $maskCollection): void
-    {
-        $this->symfonyStyle->writeln(sprintf('Found %d masks:', $maskCollection->count()));
-        $this->symfonyStyle->newLine();
-
-        $this->symfonyStyle->writeln(sprintf(' * %d exact', $maskCollection->countByType(ExactMask::class)));
-        $this->symfonyStyle->writeln(sprintf(' * %d /regex/', $maskCollection->countByType(RegexMask::class)));
-        $this->symfonyStyle->writeln(sprintf(' * %d :named', $maskCollection->countByType(NamedMask::class)));
-        $this->symfonyStyle->writeln(sprintf(' * %d skipped', $maskCollection->countByType(SkippedMask::class)));
-
-        $skippedMasks = $maskCollection->byType(SkippedMask::class);
-        if ($skippedMasks !== []) {
-            $this->symfonyStyle->newLine();
-
-            foreach ($skippedMasks as $skippedMask) {
-                $this->printMask($skippedMask);
-            }
-
-            $this->symfonyStyle->newLine();
-        }
-    }
-
     /**
      * @param string[] $featureInstructions
      */
@@ -91,16 +70,6 @@ final readonly class UnusedDefinitionsAnalyzer
         }
 
         return false;
-    }
-
-    private function printMask(AbstractMask $unusedMask): void
-    {
-        $this->symfonyStyle->writeln($unusedMask->mask);
-
-        // make path relative
-        $relativeFilePath = str_replace(getcwd() . '/', '', $unusedMask->filePath);
-        $this->symfonyStyle->writeln($relativeFilePath);
-        $this->symfonyStyle->newLine();
     }
 
     /**

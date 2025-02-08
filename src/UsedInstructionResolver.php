@@ -7,7 +7,6 @@ namespace Behastan;
 use Nette\Utils\Strings;
 use RuntimeException;
 use Symfony\Component\Finder\SplFileInfo;
-use Webmozart\Assert\Assert;
 
 final class UsedInstructionResolver
 {
@@ -17,8 +16,6 @@ final class UsedInstructionResolver
      */
     public function resolveInstructionsFromFeatureFiles(array $featureFileInfos): array
     {
-        Assert::allIsInstanceOf($featureFileInfos, SplFileInfo::class);
-
         $instructions = [];
 
         foreach ($featureFileInfos as $featureFileInfo) {

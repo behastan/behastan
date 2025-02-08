@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behastan\Command;
 
 use Behastan\Analyzer\UnusedDefinitionsAnalyzer;
+use Behastan\Enum\Option;
 use Behastan\Finder\BehatMetafilesFinder;
 use Behastan\ValueObject\Mask\AbstractMask;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +31,7 @@ final class UnusedDefinitionsCommand extends Command
         $this->setDescription('Checks Behat definitions in *Context.php files and feature files to spot unused ones');
 
         $this->addArgument(
-            'test-directory',
+            Option::TEST_DIRECTORY,
             InputArgument::REQUIRED | InputArgument::IS_ARRAY,
             'One or more paths to check or *.Context.php and feature.yml files'
         );
@@ -38,7 +39,7 @@ final class UnusedDefinitionsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $testDirectories = (array) $input->getArgument('test-directory');
+        $testDirectories = (array) $input->getArgument(Option::TEST_DIRECTORY);
         Assert::allDirectory($testDirectories);
 
         $featureFiles = BehatMetafilesFinder::findFeatureFiles($testDirectories);

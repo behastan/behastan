@@ -57,17 +57,17 @@ final class StatsCommand extends Command
         $this->symfonyStyle->title('Usage stats for PHP definitions in *Feature files');
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
-
         $classMethodContextDefinitions = $this->classMethodContextDefinitionsAnalyzer->resolve($contextFiles);
 
         foreach ($classMethodContextDefinitions as $i => $classMethodContextDefinition) {
             $section = sprintf('%d) %s', $i + 1, $classMethodContextDefinition->getMask());
             $this->symfonyStyle->section($section);
-            $this->symfonyStyle->newLine();
-        }
 
-        dump(123);
-        die;
+            $classMethodContextDefinition->recordUsage($featureInstructions);
+
+            $this->symfonyStyle->writeln(' * ' . $classMethodContextDefinition->getUsageCount() . ' usages');
+            $this->symfonyStyle->newLine(2);
+        }
 
         return Command::SUCCESS;
     }
