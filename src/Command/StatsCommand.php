@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Behastan\Command;
 
+use Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
 use Behastan\DefinitionMasksResolver;
 use Behastan\Finder\BehatMetafilesFinder;
 use Behastan\UsedInstructionResolver;
@@ -21,6 +22,7 @@ final class StatsCommand extends Command
         private readonly BehatMetafilesFinder $behatMetafilesFinder,
         private readonly DefinitionMasksResolver $definitionMasksResolver,
         private readonly UsedInstructionResolver $usedInstructionResolver,
+        private readonly ClassMethodContextDefinitionsAnalyzer $classMethodContextDefinitionsAnalyzer,
     ) {
         parent::__construct();
     }
@@ -57,8 +59,10 @@ final class StatsCommand extends Command
 
         $this->symfonyStyle->title('Usage stats for PHP definitions in *Feature files');
 
-        $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
+        // $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
+
+        $classMethodContextDefinitions = $this->classMethodContextDefinitionsAnalyzer->resolve($contextFiles);
 
         dump(123);
         die;

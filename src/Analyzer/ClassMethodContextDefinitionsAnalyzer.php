@@ -26,9 +26,28 @@ final readonly class ClassMethodContextDefinitionsAnalyzer
 
     /**
      * @param SplFileInfo[] $contextFileInfos
+     * @return ClassMethodContextDefinition[]
+     */
+    public function resolve(array $contextFileInfos): array
+    {
+        $classMethodContextDefinitionByClassMethodHash = $this->resolveAndGroupByContentHash($contextFileInfos);
+
+        $classMethodContextDefinitions = [];
+        foreach ($classMethodContextDefinitionByClassMethodHash as $currentClassMethodContextDefinitions) {
+            $classMethodContextDefinitions = array_merge(
+                $classMethodContextDefinitions,
+                $currentClassMethodContextDefinitions
+            );
+        }
+
+        return $classMethodContextDefinitions;
+    }
+
+    /**
+     * @param SplFileInfo[] $contextFileInfos
      * @return array<string, ClassMethodContextDefinition[]>
      */
-    public function analyseContextFiles(array $contextFileInfos): array
+    public function resolveAndGroupByContentHash(array $contextFileInfos): array
     {
         $classMethodContextDefinitionByClassMethodHash = [];
 

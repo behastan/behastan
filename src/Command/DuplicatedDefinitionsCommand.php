@@ -47,7 +47,7 @@ final class DuplicatedDefinitionsCommand extends Command
             return self::FAILURE;
         }
 
-        $classMethodContextDefinitionByClassMethodHash = $this->classMethodContextDefinitionsAnalyzer->analyseContextFiles(
+        $classMethodContextDefinitionByClassMethodHash = $this->classMethodContextDefinitionsAnalyzer->resolveAndGroupByContentHash(
             $contextFileInfos
         );
 
