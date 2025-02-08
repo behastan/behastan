@@ -18,7 +18,6 @@ final class DuplicatedDefinitionsCommand extends Command
 {
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
-        private readonly BehatMetafilesFinder $behatMetafilesFinder,
         private readonly ClassMethodContextDefinitionsAnalyzer $classMethodContextDefinitionsAnalyzer,
     ) {
         parent::__construct();
@@ -40,7 +39,7 @@ final class DuplicatedDefinitionsCommand extends Command
         $testDirectory = (string) $input->getArgument('test-directory');
         Assert::directory($testDirectory);
 
-        $contextFileInfos = $this->behatMetafilesFinder->findContextFiles([$testDirectory]);
+        $contextFileInfos = BehatMetafilesFinder::findContextFiles([$testDirectory]);
 
         if ($contextFileInfos === []) {
             $this->symfonyStyle->error('No *.Context files found. Please provide correct test directory');

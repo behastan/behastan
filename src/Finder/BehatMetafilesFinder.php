@@ -14,7 +14,7 @@ final class BehatMetafilesFinder
      * @param string[] $directories
      * @return SplFileInfo[]
      */
-    public function findContextFiles(array $directories): array
+    public static function findContextFiles(array $directories): array
     {
         Assert::allString($directories);
         Assert::allDirectory($directories);
@@ -32,7 +32,7 @@ final class BehatMetafilesFinder
      *
      * @return SplFileInfo[]
      */
-    public function findFeatureFiles(array $directories): array
+    public static function findFeatureFiles(array $directories): array
     {
         Assert::allString($directories);
         Assert::allDirectory($directories);

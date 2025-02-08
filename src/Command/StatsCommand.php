@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Behastan\Command;
 
 use Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
-use Behastan\DefinitionMasksResolver;
 use Behastan\Finder\BehatMetafilesFinder;
 use Behastan\UsedInstructionResolver;
 use Symfony\Component\Console\Command\Command;
@@ -19,8 +18,6 @@ final class StatsCommand extends Command
 {
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
-        private readonly BehatMetafilesFinder $behatMetafilesFinder,
-        private readonly DefinitionMasksResolver $definitionMasksResolver,
         private readonly UsedInstructionResolver $usedInstructionResolver,
         private readonly ClassMethodContextDefinitionsAnalyzer $classMethodContextDefinitionsAnalyzer,
     ) {
@@ -45,13 +42,13 @@ final class StatsCommand extends Command
         $testDirectories = (array) $input->getArgument('test-directory');
         Assert::allDirectory($testDirectories);
 
-        $featureFiles = $this->behatMetafilesFinder->findFeatureFiles($testDirectories);
+        $featureFiles = BehatMetafilesFinder::findFeatureFiles($testDirectories);
         if ($featureFiles === []) {
             $this->symfonyStyle->error('No *.feature files found. Please provide correct test directory');
             return self::FAILURE;
         }
 
-        $contextFiles = $this->behatMetafilesFinder->findContextFiles($testDirectories);
+        $contextFiles = BehatMetafilesFinder::findContextFiles($testDirectories);
         if ($contextFiles === []) {
             $this->symfonyStyle->error('No *Context.php files found. Please provide correct test directory');
             return self::FAILURE;
@@ -59,10 +56,15 @@ final class StatsCommand extends Command
 
         $this->symfonyStyle->title('Usage stats for PHP definitions in *Feature files');
 
-        // $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
 
         $classMethodContextDefinitions = $this->classMethodContextDefinitionsAnalyzer->resolve($contextFiles);
+
+        foreach ($classMethodContextDefinitions as $i => $classMethodContextDefinition) {
+            $section = sprintf('%d) %s', $i + 1, $classMethodContextDefinition->getMask());
+            $this->symfonyStyle->section($section);
+            $this->symfonyStyle->newLine();
+        }
 
         dump(123);
         die;

@@ -18,7 +18,6 @@ final class UnusedDefinitionsCommand extends Command
 {
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
-        private readonly BehatMetafilesFinder $behatMetafilesFinder,
         private readonly UnusedDefinitionsAnalyzer $unusedDefinitionsAnalyzer,
     ) {
         parent::__construct();
@@ -42,13 +41,13 @@ final class UnusedDefinitionsCommand extends Command
         $testDirectories = (array) $input->getArgument('test-directory');
         Assert::allDirectory($testDirectories);
 
-        $featureFiles = $this->behatMetafilesFinder->findFeatureFiles($testDirectories);
+        $featureFiles = BehatMetafilesFinder::findFeatureFiles($testDirectories);
         if ($featureFiles === []) {
             $this->symfonyStyle->error('No *.feature files found. Please provide correct test directory');
             return self::FAILURE;
         }
 
-        $contextFiles = $this->behatMetafilesFinder->findContextFiles($testDirectories);
+        $contextFiles = BehatMetafilesFinder::findContextFiles($testDirectories);
         if ($contextFiles === []) {
             $this->symfonyStyle->error('No *Context.php files found. Please provide correct test directory');
             return self::FAILURE;
