@@ -59,7 +59,8 @@ final class DuplicatedDefinitionsCommand extends Command
             $classMethodContextDefinitionByClassMethodHash
         );
 
-        foreach ($classMethodContextDefinitionByClassMethodHash as $i => $classAndMethods) {
+        $i = 0;
+        foreach ($classMethodContextDefinitionByClassMethodHash as $classAndMethods) {
             $this->symfonyStyle->section(sprintf('%d)', $i + 1));
 
             foreach ($classAndMethods as $classMethodContextDefinition) {
@@ -78,6 +79,7 @@ final class DuplicatedDefinitionsCommand extends Command
             }
 
             $this->symfonyStyle->newLine();
+            ++$i;
         }
 
         $this->symfonyStyle->error(
@@ -92,8 +94,8 @@ final class DuplicatedDefinitionsCommand extends Command
     /**
      * @template TItem as object
      *
-     * @param TItem[] $items
-     * @return array<int, TItem>
+     * @param array<string, TItem[]> $items
+     * @return array<string, TItem[]>
      */
     private function filterOutNotDuplicated(array $items): array
     {
@@ -103,6 +105,6 @@ final class DuplicatedDefinitionsCommand extends Command
             }
         }
 
-        return array_values($items);
+        return $items;
     }
 }

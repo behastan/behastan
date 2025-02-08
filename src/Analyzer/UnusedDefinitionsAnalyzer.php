@@ -18,6 +18,11 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final readonly class UnusedDefinitionsAnalyzer
 {
+    /**
+     * @var string
+     */
+    private const MASK_VALUE_REGEX = '#(\:[\W\w]+)#';
+
     public function __construct(
         private SymfonyStyle $symfonyStyle,
         private DefinitionMasksResolver $definitionMasksResolver,
@@ -93,7 +98,7 @@ final readonly class UnusedDefinitionsAnalyzer
 
         if ($mask instanceof NamedMask) {
             // normalize :mask definition to regex
-            $regexMask = '#' . Strings::replace($mask->mask, '#(\:[\W\w]+)#', '(.*?)') . '#';
+            $regexMask = '#' . Strings::replace($mask->mask, self::MASK_VALUE_REGEX, '(.*?)') . '#';
             if ($this->isRegexDefinitionUsed($regexMask, $featureInstructions)) {
                 return true;
             }
