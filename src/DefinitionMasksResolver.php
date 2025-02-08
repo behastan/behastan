@@ -20,7 +20,6 @@ use SplFileInfo;
 
 final class DefinitionMasksResolver
 {
-
     public function __construct(
         private readonly SimplePhpParser $simplePhpParser,
         private readonly NodeFinder $nodeFinder,

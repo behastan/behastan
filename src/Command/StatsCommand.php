@@ -71,7 +71,9 @@ final class StatsCommand extends Command
                 continue;
             }
 
-            $this->symfonyStyle->writeln(sprintf('%d) <fg=green>%s</>', $i + 1, $classMethodContextDefinition->getMask()));
+            $this->symfonyStyle->writeln(
+                sprintf('%d) <fg=green>%s</>', $i + 1, $classMethodContextDefinition->getMask())
+            );
 
             $classMethodContextDefinition->recordUsage($featureInstructions);
 
