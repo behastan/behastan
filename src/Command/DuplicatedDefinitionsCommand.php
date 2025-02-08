@@ -96,14 +96,16 @@ final class DuplicatedDefinitionsCommand extends Command
         }
 
         // keep only duplicated
-        $classMethodContextDefinitionByClassMethodHash = $this->filterOutNotDuplicated($classMethodContextDefinitionByClassMethodHash);
+        $classMethodContextDefinitionByClassMethodHash = $this->filterOutNotDuplicated(
+            $classMethodContextDefinitionByClassMethodHash
+        );
 
         foreach ($classMethodContextDefinitionByClassMethodHash as $i => $classAndMethods) {
             $this->symfonyStyle->section(sprintf('%d)', $i + 1));
 
             foreach ($classAndMethods as $classMethodContextDefinition) {
                 /** @var ClassMethodContextDefinition $classMethodContextDefinition */
-                $relativeFilePath = substr($classMethodContextDefinition->getFilePath(), strlen($testDirectory ) + 1);
+                $relativeFilePath = substr($classMethodContextDefinition->getFilePath(), strlen($testDirectory) + 1);
 
                 $this->symfonyStyle->writeln(
                     $relativeFilePath . ':' . $classMethodContextDefinition->getMethodLine()
@@ -116,7 +118,11 @@ final class DuplicatedDefinitionsCommand extends Command
             $this->symfonyStyle->newLine();
         }
 
-        $this->symfonyStyle->error(sprintf('Found %d duplicated class classMethod contents', count($classMethodContextDefinitionByClassMethodHash)));
+        $this->symfonyStyle->error(
+            sprintf('Found %d duplicated class classMethod contents', count(
+                $classMethodContextDefinitionByClassMethodHash
+            ))
+        );
 
         return Command::FAILURE;
     }
