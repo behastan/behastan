@@ -7,7 +7,6 @@ namespace Behastan\Resolver;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Webmozart\Assert\Assert;
 
 final class ClassMethodMasksResolver
 {
