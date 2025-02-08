@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behastan\DependencyInjection;
 
 use Behastan\Command\DuplicatedDefinitionsCommand;
+use Behastan\Command\StatsCommand;
 use Behastan\Command\UnusedDefinitionsCommand;
 use Illuminate\Container\Container;
 use PhpParser\Parser;
@@ -28,7 +29,11 @@ final class ContainerFactory
             $application = new Application('Behastan');
 
             // register commands
-            foreach ([DuplicatedDefinitionsCommand::class, UnusedDefinitionsCommand::class] as $commandClass) {
+            foreach ([
+                DuplicatedDefinitionsCommand::class,
+                UnusedDefinitionsCommand::class,
+                StatsCommand::class,
+            ] as $commandClass) {
                 $command = $container->make($commandClass);
                 $application->add($command);
             }

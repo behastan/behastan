@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Behastan\Command;
 
-use Behastan\Analyzer\UnusedDefinitionsAnalyzer;
+use Behastan\DefinitionMasksResolver;
 use Behastan\Finder\BehatMetafilesFinder;
+use Behastan\UsedInstructionResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,19 +14,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Assert\Assert;
 
-final class DefinitionStatsCommand extends Command
+final class StatsCommand extends Command
 {
     public function __construct(
         private readonly SymfonyStyle $symfonyStyle,
         private readonly BehatMetafilesFinder $behatMetafilesFinder,
-        private readonly UnusedDefinitionsAnalyzer $unusedDefinitionsAnalyzer,
+        private readonly DefinitionMasksResolver $definitionMasksResolver,
+        private readonly UsedInstructionResolver $usedInstructionResolver,
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setName('definitions-stats');
+        $this->setName('stats');
 
         $this->setDescription('Get Definition usage stats');
 
@@ -55,7 +57,11 @@ final class DefinitionStatsCommand extends Command
 
         $this->symfonyStyle->title('Usage stats for PHP definitions in *Feature files');
 
+        $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
+        $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
 
+        dump(123);
+        die;
 
         return Command::SUCCESS;
     }
