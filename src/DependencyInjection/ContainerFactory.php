@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Behastan\DependencyInjection;
 
+use Behastan\Command\DuplicatedDefinitionsCommand;
+use Behastan\Command\UnusedDefinitionsCommand;
 use Illuminate\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
@@ -11,8 +13,6 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
-use Webmozart\Assert\Assert;
 
 final class ContainerFactory
 {
@@ -27,10 +27,8 @@ final class ContainerFactory
         $container->singleton(Application::class, function (Container $container): Application {
             $application = new Application('Behastan');
 
-            $commandClasses = $this->findCommandClasses();
-
             // register commands
-            foreach ($commandClasses as $commandClass) {
+            foreach ([DuplicatedDefinitionsCommand::class, UnusedDefinitionsCommand::class] as $commandClass) {
                 $command = $container->make($commandClass);
                 $application->add($command);
             }
@@ -58,33 +56,12 @@ final class ContainerFactory
     public function hideDefaultCommands(Application $application): void
     {
         $application->get('list')
-            ->setHidden(true);
+            ->setHidden();
+
         $application->get('completion')
-            ->setHidden(true);
+            ->setHidden();
+
         $application->get('help')
-            ->setHidden(true);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function findCommandClasses(): array
-    {
-        $commandFinder = Finder::create()
-            ->files()
-            ->name('*Command.php')
-            ->in(__DIR__ . '/../Command');
-
-        $commandClasses = [];
-        foreach ($commandFinder as $commandFile) {
-            $commandClass = 'Behastan\\Command\\' . $commandFile->getBasename('.php');
-
-            // make sure it exists
-            Assert::classExists($commandClass);
-
-            $commandClasses[] = $commandClass;
-        }
-
-        return $commandClasses;
+            ->setHidden();
     }
 }
