@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behastan\Command;
 
 use Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
+use Behastan\Analyzer\MaskAnalyzer;
 use Behastan\Finder\BehatMetafilesFinder;
 use Behastan\UsedInstructionResolver;
 use Symfony\Component\Console\Command\Command;
@@ -59,14 +60,24 @@ final class StatsCommand extends Command
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
         $classMethodContextDefinitions = $this->classMethodContextDefinitionsAnalyzer->resolve($contextFiles);
 
-        foreach ($classMethodContextDefinitions as $i => $classMethodContextDefinition) {
-            $section = sprintf('%d) %s', $i + 1, $classMethodContextDefinition->getMask());
-            $this->symfonyStyle->section($section);
+        $i = 0;
+        foreach ($classMethodContextDefinitions as $classMethodContextDefinition) {
+            // @todo handle later, as dynamic
+            if (MaskAnalyzer::isRegex($classMethodContextDefinition->getMask())) {
+                continue;
+            }
+
+            if (MaskAnalyzer::isValueMask($classMethodContextDefinition->getMask())) {
+                continue;
+            }
+
+            $this->symfonyStyle->writeln(sprintf('%d) <fg=green>%s</>', $i + 1, $classMethodContextDefinition->getMask()));
 
             $classMethodContextDefinition->recordUsage($featureInstructions);
 
             $this->symfonyStyle->writeln(' * ' . $classMethodContextDefinition->getUsageCount() . ' usages');
-            $this->symfonyStyle->newLine(2);
+            $this->symfonyStyle->newLine();
+            ++$i;
         }
 
         return Command::SUCCESS;

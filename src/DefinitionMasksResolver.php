@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Behastan;
 
+use Behastan\Analyzer\MaskAnalyzer;
 use Behastan\PhpParser\SimplePhpParser;
 use Behastan\Resolver\ClassMethodMasksResolver;
 use Behastan\ValueObject\ClassMethodContextDefinition;
@@ -19,6 +20,7 @@ use SplFileInfo;
 
 final class DefinitionMasksResolver
 {
+
     public function __construct(
         private readonly SimplePhpParser $simplePhpParser,
         private readonly NodeFinder $nodeFinder,
@@ -50,7 +52,7 @@ final class DefinitionMasksResolver
             }
 
             // regex pattern, handled else-where
-            if (str_starts_with($rawMask, '/')) {
+            if (MaskAnalyzer::isRegex($rawMask)) {
                 $masks[] = new RegexMask(
                     $rawMask,
                     $classMethodContextDefinition->getFilePath(),
@@ -61,9 +63,7 @@ final class DefinitionMasksResolver
             }
 
             // handled in mask one
-            preg_match('#(\:[\W\w]+)#', $rawMask, $match);
-
-            if ($match !== []) {
+            if (MaskAnalyzer::isValueMask($rawMask)) {
                 //  if (str_contains($rawMask, ':')) {
                 $masks[] = new NamedMask(
                     $rawMask,
