@@ -2,8 +2,6 @@
 
 [![Downloads total](https://img.shields.io/packagist/dt/behastan/behastan.svg?style=flat-square)](https://packagist.org/packages/behastan/behastan/stats)
 
-Swiss knife in pocket of every upgrade architect!
-
 <br>
 
 ## Install
