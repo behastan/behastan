@@ -11,7 +11,7 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Webmozart\Assert\Assert;
 
-final class SimplePhpParser
+final readonly class SimplePhpParser
 {
     private Parser $phpParser;
 

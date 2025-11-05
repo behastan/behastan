@@ -18,12 +18,12 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
 use SplFileInfo;
 
-final class DefinitionMasksResolver
+final readonly class DefinitionMasksResolver
 {
     public function __construct(
-        private readonly SimplePhpParser $simplePhpParser,
-        private readonly NodeFinder $nodeFinder,
-        private readonly ClassMethodMasksResolver $classMethodMasksResolver,
+        private SimplePhpParser $simplePhpParser,
+        private NodeFinder $nodeFinder,
+        private ClassMethodMasksResolver $classMethodMasksResolver,
     ) {
     }
 
@@ -100,9 +100,11 @@ final class DefinitionMasksResolver
             if (! $class instanceof Class_) {
                 continue;
             }
-
             // is magic class?
-            if ($class->isAnonymous() || ! $class->namespacedName instanceof Name) {
+            if ($class->isAnonymous()) {
+                continue;
+            }
+            if (! $class->namespacedName instanceof Name) {
                 continue;
             }
 
