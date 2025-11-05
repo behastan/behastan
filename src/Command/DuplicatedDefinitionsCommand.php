@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Command;
+namespace Rector\Behastan\Command;
 
-use Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
-use Behastan\Enum\Option;
-use Behastan\Finder\BehatMetafilesFinder;
+use Rector\Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
+use Rector\Behastan\Enum\Option;
+use Rector\Behastan\Finder\BehatMetafilesFinder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

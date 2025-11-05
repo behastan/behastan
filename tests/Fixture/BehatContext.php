@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Tests\Fixture;
+namespace Rector\Behastan\Tests\Fixture;
 
 final class BehatContext
 {

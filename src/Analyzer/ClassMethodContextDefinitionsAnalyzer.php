@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Analyzer;
+namespace Rector\Behastan\Analyzer;
 
-use Behastan\PhpParser\SimplePhpParser;
-use Behastan\Resolver\ClassMethodMasksResolver;
-use Behastan\ValueObject\ClassMethodContextDefinition;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Behastan\PhpParser\SimplePhpParser;
+use Rector\Behastan\Resolver\ClassMethodMasksResolver;
+use Rector\Behastan\ValueObject\ClassMethodContextDefinition;
 use Symfony\Component\Finder\SplFileInfo;
 
 final readonly class ClassMethodContextDefinitionsAnalyzer

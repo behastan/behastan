@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\ValueObject\Mask;
+namespace Rector\Behastan\ValueObject\Mask;
 
 final class ExactMask extends AbstractMask
 {

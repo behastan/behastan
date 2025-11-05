@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Analyzer;
+namespace Rector\Behastan\Analyzer;
 
-use Behastan\DefinitionMasksResolver;
-use Behastan\Reporting\MaskCollectionStatsPrinter;
-use Behastan\UsedInstructionResolver;
-use Behastan\ValueObject\Mask\AbstractMask;
-use Behastan\ValueObject\Mask\ExactMask;
-use Behastan\ValueObject\Mask\NamedMask;
-use Behastan\ValueObject\Mask\RegexMask;
-use Behastan\ValueObject\Mask\SkippedMask;
 use Nette\Utils\Strings;
+use Rector\Behastan\DefinitionMasksResolver;
+use Rector\Behastan\Reporting\MaskCollectionStatsPrinter;
+use Rector\Behastan\UsedInstructionResolver;
+use Rector\Behastan\ValueObject\Mask\AbstractMask;
+use Rector\Behastan\ValueObject\Mask\ExactMask;
+use Rector\Behastan\ValueObject\Mask\NamedMask;
+use Rector\Behastan\ValueObject\Mask\RegexMask;
+use Rector\Behastan\ValueObject\Mask\SkippedMask;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -68,7 +68,7 @@ final readonly class UnusedDefinitionsAnalyzer
     private function isRegexDefinitionUsed(string $regexBehatDefinition, array $featureInstructions): bool
     {
         foreach ($featureInstructions as $featureInstruction) {
-            if (Strings::match($featureInstruction, $regexBehatDefinition)) {
+            if (preg_match($featureInstruction, $regexBehatDefinition)) {
                 // it is used!
                 return true;
             }
@@ -98,7 +98,8 @@ final readonly class UnusedDefinitionsAnalyzer
 
         if ($mask instanceof NamedMask) {
             // normalize :mask definition to regex
-            $regexMask = '#' . Strings::replace($mask->mask, self::MASK_VALUE_REGEX, '(.*?)') . '#';
+            $regexMask = '#' . preg_replace(self::MASK_VALUE_REGEX, '(.*?)', $mask->mask) . '#';
+
             if ($this->isRegexDefinitionUsed($regexMask, $featureInstructions)) {
                 return true;
             }

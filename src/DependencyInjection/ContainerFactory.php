@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Behastan\DependencyInjection;
+namespace Rector\Behastan\DependencyInjection;
 
-use Behastan\Command\DuplicatedDefinitionsCommand;
-use Behastan\Command\StatsCommand;
-use Behastan\Command\UnusedDefinitionsCommand;
 use Illuminate\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use Rector\Behastan\Command\DuplicatedDefinitionsCommand;
+use Rector\Behastan\Command\StatsCommand;
+use Rector\Behastan\Command\UnusedDefinitionsCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;

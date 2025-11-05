@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Resolver;
+namespace Rector\Behastan\Resolver;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Scalar\String_;

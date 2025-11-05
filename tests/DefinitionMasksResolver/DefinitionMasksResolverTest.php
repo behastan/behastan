@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Tests\DefinitionMasksResolver;
+namespace Rector\Behastan\Tests\DefinitionMasksResolver;
 
-use Behastan\DefinitionMasksResolver;
-use Behastan\Finder\BehatMetafilesFinder;
-use Behastan\Tests\AbstractTestCase;
-use Behastan\Tests\DefinitionMasksResolver\Fixture\AnotherBehatContext;
-use Behastan\ValueObject\Mask\ExactMask;
+use Rector\Behastan\DefinitionMasksResolver;
+use Rector\Behastan\Finder\BehatMetafilesFinder;
+use Rector\Behastan\Tests\AbstractTestCase;
+use Rector\Behastan\Tests\DefinitionMasksResolver\Fixture\AnotherBehatContext;
+use Rector\Behastan\ValueObject\Mask\ExactMask;
 
 final class DefinitionMasksResolverTest extends AbstractTestCase
 {

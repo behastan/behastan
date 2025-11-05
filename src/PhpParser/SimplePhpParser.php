@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\PhpParser;
+namespace Rector\Behastan\PhpParser;
 
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;

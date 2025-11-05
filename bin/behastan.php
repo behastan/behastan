@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\Behastan\DependencyInjection\ContainerFactory;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Behastan\DependencyInjection\ContainerFactory;
 
 $possibleAutoloadPaths = [
     // dependency

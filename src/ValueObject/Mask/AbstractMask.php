@@ -1,8 +1,8 @@
 <?php
 
-namespace Behastan\ValueObject\Mask;
+namespace Rector\Behastan\ValueObject\Mask;
 
-use Behastan\Contract\MaskInterface;
+use Rector\Behastan\Contract\MaskInterface;
 
 abstract class AbstractMask implements MaskInterface
 {
