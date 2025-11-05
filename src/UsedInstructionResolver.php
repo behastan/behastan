@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Behastan202511\Behastan;
 
-namespace Behastan;
-
-use Nette\Utils\Strings;
+use Behastan202511\Nette\Utils\Strings;
 use RuntimeException;
 use Symfony\Component\Finder\SplFileInfo;
-
 final class UsedInstructionResolver
 {
     /**
@@ -17,26 +15,16 @@ final class UsedInstructionResolver
     public function resolveInstructionsFromFeatureFiles(array $featureFileInfos): array
     {
         $instructions = [];
-
         foreach ($featureFileInfos as $featureFileInfo) {
-            $matches = Strings::matchAll(
-                $featureFileInfo->getContents(),
-                '#\s+(Given|When|And|Then)\s+(?<instruction>.*?)\n#m'
-            );
-
+            $matches = Strings::matchAll($featureFileInfo->getContents(), '#\s+(Given|When|And|Then)\s+(?<instruction>.*?)\n#m');
             if ($matches === []) {
                 // there should be at least one instruction in each feature file
-                throw new RuntimeException(sprintf(
-                    'Unable to resolve instructions from %s file',
-                    $featureFileInfo->getRealPath()
-                ));
+                throw new RuntimeException(sprintf('Unable to resolve instructions from %s file', $featureFileInfo->getRealPath()));
             }
-
             foreach ($matches as $match) {
                 $instructions[] = trim((string) $match['instruction']);
             }
         }
-
         return $instructions;
     }
 }
