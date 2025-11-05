@@ -33,10 +33,10 @@ final readonly class ClassMethodContextDefinitionsAnalyzer
         $classMethodContextDefinitionByClassMethodHash = $this->resolveAndGroupByContentHash($contextFileInfos);
 
         $classMethodContextDefinitions = [];
-        foreach ($classMethodContextDefinitionByClassMethodHash as $currentClassMethodContextDefinitions) {
+        foreach ($classMethodContextDefinitionByClassMethodHash as $classMethodContextDefinition) {
             $classMethodContextDefinitions = array_merge(
                 $classMethodContextDefinitions,
-                $currentClassMethodContextDefinitions
+                $classMethodContextDefinition
             );
         }
 
@@ -55,23 +55,28 @@ final readonly class ClassMethodContextDefinitionsAnalyzer
             $contextClassStmts = $this->simplePhpParser->parseFilePath($contextFileInfo->getRealPath());
 
             $class = $this->nodeFinder->findFirstInstanceOf($contextClassStmts, Class_::class);
-            if (! $class instanceof Class_ || ! $class->namespacedName instanceof Name) {
+            if (! $class instanceof Class_) {
+                continue;
+            }
+            if (! $class->namespacedName instanceof Name) {
                 continue;
             }
 
             $className = $class->namespacedName->toString();
 
             foreach ($class->getMethods() as $classMethod) {
-                if (! $classMethod->isPublic() || $classMethod->isMagic()) {
+                if (! $classMethod->isPublic()) {
                     continue;
                 }
-
+                if ($classMethod->isMagic()) {
+                    continue;
+                }
                 $classMethodHash = $this->createClassMethodHash($classMethod);
 
                 $rawMasks = $this->classMethodMasksResolver->resolve($classMethod);
 
                 // no masks :(
-                if (count($rawMasks) === 0) {
+                if ($rawMasks === []) {
                     continue;
                 }
 

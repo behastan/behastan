@@ -15,6 +15,7 @@ return RectorConfig::configure()
         earlyReturn: true,
         codingStyle: true,
         instanceOf: true,
+        phpunitCodeQuality: true,
         naming: true
     )
     ->withImportNames()

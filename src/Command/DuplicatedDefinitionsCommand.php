@@ -7,7 +7,6 @@ namespace Behastan\Command;
 use Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
 use Behastan\Enum\Option;
 use Behastan\Finder\BehatMetafilesFinder;
-use Behastan\ValueObject\ClassMethodContextDefinition;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,21 +59,18 @@ final class DuplicatedDefinitionsCommand extends Command
         );
 
         $i = 0;
-        foreach ($classMethodContextDefinitionByClassMethodHash as $classAndMethods) {
+        foreach ($classMethodContextDefinitionByClassMethodHash as $classMethodContextDefinition) {
             $this->symfonyStyle->section(sprintf('%d)', $i + 1));
 
-            foreach ($classAndMethods as $classMethodContextDefinition) {
-                /** @var ClassMethodContextDefinition $classMethodContextDefinition */
+            foreach ($classMethodContextDefinition as $classAndMethod) {
                 $relativeFilePath = substr(
-                    $classMethodContextDefinition->getFilePath(),
-                    strlen($testDirectories[0]) + 1
+                    $classAndMethod->getFilePath(),
+                    strlen((string) $testDirectories[0]) + 1
                 );
 
-                $this->symfonyStyle->writeln(
-                    $relativeFilePath . ':' . $classMethodContextDefinition->getMethodLine()
-                );
+                $this->symfonyStyle->writeln($relativeFilePath . ':' . $classAndMethod->getMethodLine());
 
-                $this->symfonyStyle->writeln('Mask: <fg=green>"' . $classMethodContextDefinition->getMask() . '"</>');
+                $this->symfonyStyle->writeln('Mask: <fg=green>"' . $classAndMethod->getMask() . '"</>');
                 $this->symfonyStyle->newLine();
             }
 

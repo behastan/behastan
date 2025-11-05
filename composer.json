@@ -16,10 +16,10 @@
     },
     "require-dev": {
         "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^11.5",
-        "rector/rector": "^2.0",
-        "phpecs/phpecs": "^2.0",
+        "rector/rector": "^2.2",
+        "phpecs/phpecs": "^2.2",
         "tomasvotruba/class-leak": "^2.0",
         "tracy/tracy": "^2.10"
     },
