@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Behastan\Analyzer;
 
+use Nette\Utils\Strings;
 use Rector\Behastan\DefinitionMasksResolver;
 use Rector\Behastan\Reporting\MaskCollectionStatsPrinter;
 use Rector\Behastan\UsedInstructionResolver;
@@ -67,8 +68,7 @@ final readonly class UnusedDefinitionsAnalyzer
     private function isRegexDefinitionUsed(string $regexBehatDefinition, array $featureInstructions): bool
     {
         foreach ($featureInstructions as $featureInstruction) {
-            # @ on purpose = the feature instruction might not be a regex pattern
-            if (@preg_match($featureInstruction, $regexBehatDefinition)) {
+            if (Strings::match($featureInstruction, $regexBehatDefinition)) {
                 // it is used!
                 return true;
             }
@@ -98,7 +98,7 @@ final readonly class UnusedDefinitionsAnalyzer
 
         if ($mask instanceof NamedMask) {
             // normalize :mask definition to regex
-            $regexMask = '#' . preg_replace(self::MASK_VALUE_REGEX, '(.*?)', $mask->mask) . '#';
+            $regexMask = '#' . Strings::replace($mask->mask, self::MASK_VALUE_REGEX, '(.*?)') . '#';
 
             if ($this->isRegexDefinitionUsed($regexMask, $featureInstructions)) {
                 return true;
