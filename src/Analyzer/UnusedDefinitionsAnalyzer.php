@@ -67,7 +67,8 @@ final readonly class UnusedDefinitionsAnalyzer
     private function isRegexDefinitionUsed(string $regexBehatDefinition, array $featureInstructions): bool
     {
         foreach ($featureInstructions as $featureInstruction) {
-            if (preg_match($featureInstruction, $regexBehatDefinition)) {
+            # @ on purpose = the feature instruction might not be a regex pattern
+            if (@preg_match($featureInstruction, $regexBehatDefinition)) {
                 // it is used!
                 return true;
             }
