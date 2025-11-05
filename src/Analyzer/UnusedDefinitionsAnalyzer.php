@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Behastan\Analyzer;
 
-use Nette\Utils\Strings;
 use Rector\Behastan\DefinitionMasksResolver;
 use Rector\Behastan\Reporting\MaskCollectionStatsPrinter;
 use Rector\Behastan\UsedInstructionResolver;

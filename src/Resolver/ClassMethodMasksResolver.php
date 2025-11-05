@@ -18,7 +18,7 @@ final class ClassMethodMasksResolver
     /**
      * @var string[]
      */
-    private const ATTRIBUTE_NAMES = ['Behat\Step\Then', 'Behat\Step\Given', 'Behat\Step\And'];
+    private const ATTRIBUTE_NAMES = ['Behat\Step\When', 'Behat\Step\Then', 'Behat\Step\Given', 'Behat\Step\And'];
 
     /**
      * @return string[]

@@ -90,7 +90,9 @@ final class UnusedDefinitionsCommand extends Command
 
         // make path relative
         $relativeFilePath = str_replace(getcwd() . '/', '', $unusedMask->filePath);
-        $this->symfonyStyle->writeln($relativeFilePath);
+        $filePathWithLine = $relativeFilePath . ':' . $unusedMask->line;
+
+        $this->symfonyStyle->writeln($filePathWithLine);
         $this->symfonyStyle->newLine();
     }
 }

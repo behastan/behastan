@@ -44,6 +44,7 @@ final readonly class DefinitionMasksResolver
                 $masks[] = new SkippedMask(
                     $rawMask,
                     $classMethodContextDefinition->getFilePath(),
+                    $classMethodContextDefinition->getMethodLine(),
                     $classMethodContextDefinition->getClass(),
                     $classMethodContextDefinition->getMethodName()
                 );
@@ -55,6 +56,7 @@ final readonly class DefinitionMasksResolver
                 $masks[] = new RegexMask(
                     $rawMask,
                     $classMethodContextDefinition->getFilePath(),
+                    $classMethodContextDefinition->getMethodLine(),
                     $classMethodContextDefinition->getClass(),
                     $classMethodContextDefinition->getMethodName()
                 );
@@ -67,6 +69,7 @@ final readonly class DefinitionMasksResolver
                 $masks[] = new NamedMask(
                     $rawMask,
                     $classMethodContextDefinition->getFilePath(),
+                    $classMethodContextDefinition->getMethodLine(),
                     $classMethodContextDefinition->getClass(),
                     $classMethodContextDefinition->getMethodName()
                 );
@@ -76,6 +79,7 @@ final readonly class DefinitionMasksResolver
             $masks[] = new ExactMask(
                 $rawMask,
                 $classMethodContextDefinition->getFilePath(),
+                $classMethodContextDefinition->getMethodLine(),
                 $classMethodContextDefinition->getClass(),
                 $classMethodContextDefinition->getMethodName()
             );
@@ -118,7 +122,8 @@ final readonly class DefinitionMasksResolver
                         $fileInfo->getRealPath(),
                         $className,
                         $classMethod->name->toString(),
-                        $rawMask
+                        $rawMask,
+                        $classMethod->getStartLine()
                     );
                 }
             }

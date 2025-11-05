@@ -13,7 +13,7 @@ final class ClassMethodContextDefinition
         private readonly string $class,
         private readonly string $methodName,
         private readonly string $mask,
-        private readonly ?int $methodLine = null
+        private readonly int $methodLine
     ) {
     }
 
@@ -37,7 +37,7 @@ final class ClassMethodContextDefinition
         return $this->mask;
     }
 
-    public function getMethodLine(): ?int
+    public function getMethodLine(): int
     {
         return $this->methodLine;
     }
