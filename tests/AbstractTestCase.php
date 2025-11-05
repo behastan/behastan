@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Tests;
+namespace Rector\Behastan\Tests;
 
-use Behastan\DependencyInjection\ContainerFactory;
 use Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
+use Rector\Behastan\DependencyInjection\ContainerFactory;
 
 abstract class AbstractTestCase extends TestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\ValueObject;
+namespace Rector\Behastan\ValueObject;
 
 final class ClassMethodContextDefinition
 {

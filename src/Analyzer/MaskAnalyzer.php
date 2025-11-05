@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Analyzer;
+namespace Rector\Behastan\Analyzer;
 
 final class MaskAnalyzer
 {

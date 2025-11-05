@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Reporting;
+namespace Rector\Behastan\Reporting;
 
-use Behastan\ValueObject\Mask\AbstractMask;
-use Behastan\ValueObject\Mask\ExactMask;
-use Behastan\ValueObject\Mask\NamedMask;
-use Behastan\ValueObject\Mask\RegexMask;
-use Behastan\ValueObject\Mask\SkippedMask;
-use Behastan\ValueObject\MaskCollection;
+use Rector\Behastan\ValueObject\Mask\AbstractMask;
+use Rector\Behastan\ValueObject\Mask\ExactMask;
+use Rector\Behastan\ValueObject\Mask\NamedMask;
+use Rector\Behastan\ValueObject\Mask\RegexMask;
+use Rector\Behastan\ValueObject\Mask\SkippedMask;
+use Rector\Behastan\ValueObject\MaskCollection;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final readonly class MaskCollectionStatsPrinter

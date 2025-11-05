@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Behastan;
+namespace Rector\Behastan;
 
-use Nette\Utils\Strings;
 use RuntimeException;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -19,9 +18,11 @@ final class UsedInstructionResolver
         $instructions = [];
 
         foreach ($featureFileInfos as $featureFileInfo) {
-            $matches = Strings::matchAll(
+            preg_match_all(
+                '#\s+(Given|When|And|Then)\s+(?<instruction>.*?)\n#m',
                 $featureFileInfo->getContents(),
-                '#\s+(Given|When|And|Then)\s+(?<instruction>.*?)\n#m'
+                $matches,
+                PREG_SET_ORDER
             );
 
             if ($matches === []) {

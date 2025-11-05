@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Contract;
+namespace Rector\Behastan\Contract;
 
 interface MaskInterface
 {

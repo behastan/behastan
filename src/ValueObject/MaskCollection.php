@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Behastan\ValueObject;
+namespace Rector\Behastan\ValueObject;
 
-use Behastan\ValueObject\Mask\AbstractMask;
+use Rector\Behastan\ValueObject\Mask\AbstractMask;
 
 final readonly class MaskCollection
 {

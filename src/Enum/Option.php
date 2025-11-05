@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Enum;
+namespace Rector\Behastan\Enum;
 
 final class Option
 {

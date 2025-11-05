@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Behastan;
+namespace Rector\Behastan;
 
-use Behastan\Analyzer\MaskAnalyzer;
-use Behastan\PhpParser\SimplePhpParser;
-use Behastan\Resolver\ClassMethodMasksResolver;
-use Behastan\ValueObject\ClassMethodContextDefinition;
-use Behastan\ValueObject\Mask\ExactMask;
-use Behastan\ValueObject\Mask\NamedMask;
-use Behastan\ValueObject\Mask\RegexMask;
-use Behastan\ValueObject\Mask\SkippedMask;
-use Behastan\ValueObject\MaskCollection;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
+use Rector\Behastan\Analyzer\MaskAnalyzer;
+use Rector\Behastan\PhpParser\SimplePhpParser;
+use Rector\Behastan\Resolver\ClassMethodMasksResolver;
+use Rector\Behastan\ValueObject\ClassMethodContextDefinition;
+use Rector\Behastan\ValueObject\Mask\ExactMask;
+use Rector\Behastan\ValueObject\Mask\NamedMask;
+use Rector\Behastan\ValueObject\Mask\RegexMask;
+use Rector\Behastan\ValueObject\Mask\SkippedMask;
+use Rector\Behastan\ValueObject\MaskCollection;
 use SplFileInfo;
 
 final readonly class DefinitionMasksResolver

@@ -1,18 +1,17 @@
 {
-    "name": "behastan/behastan",
-    "description": "Modern Static analysis for Behat tests",
+    "name": "rector/behastan",
+    "description": "Static analysis for Behat definitions and context files",
     "license": "MIT",
     "bin": [
         "bin/behastan"
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/container": "^11.41|^12.0",
-        "nette/utils": "^4.0",
+        "illuminate/container": "^11.41|^12.37",
         "nikic/php-parser": "^5.6",
         "symfony/console": "^6.4|^7.0|^8.0",
         "symfony/finder": "^6.4|^7.0|^8.0",
-        "webmozart/assert": "^1.11"
+        "webmozart/assert": "^1.12"
     },
     "require-dev": {
         "phpstan/extension-installer": "^1.4",
@@ -25,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Behastan\\": "src"
+            "Rector\\Behastan\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Behastan\\Tests\\": "tests"
+            "Rector\\Behastan\\Tests\\": "tests"
         },
         "classmap": [
             "stubs"

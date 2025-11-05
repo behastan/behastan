@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Tests;
+namespace Rector\Behastan\Tests;
 
-use Behastan\Analyzer\UnusedDefinitionsAnalyzer;
-use Behastan\Finder\BehatMetafilesFinder;
-use Behastan\ValueObject\Mask\AbstractMask;
+use Rector\Behastan\Analyzer\UnusedDefinitionsAnalyzer;
+use Rector\Behastan\Finder\BehatMetafilesFinder;
+use Rector\Behastan\ValueObject\Mask\AbstractMask;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Style\SymfonyStyle;
 

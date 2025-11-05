@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Behastan\Command;
+namespace Rector\Behastan\Command;
 
-use Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
-use Behastan\Analyzer\MaskAnalyzer;
-use Behastan\Finder\BehatMetafilesFinder;
-use Behastan\UsedInstructionResolver;
+use Rector\Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
+use Rector\Behastan\Analyzer\MaskAnalyzer;
+use Rector\Behastan\Finder\BehatMetafilesFinder;
+use Rector\Behastan\UsedInstructionResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
