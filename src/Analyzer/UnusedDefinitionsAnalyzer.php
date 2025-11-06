@@ -16,6 +16,9 @@ use Rector\Behastan\ValueObject\Mask\SkippedMask;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @see \Rector\Behastan\Tests\Analyzer\UnusedDefinitionsAnalyzer\UnusedDefinitionsAnalyzerTest
+ */
 final readonly class UnusedDefinitionsAnalyzer
 {
     /**
@@ -43,7 +46,6 @@ final readonly class UnusedDefinitionsAnalyzer
         $this->maskCollectionStatsPrinter->printStats($maskCollection);
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
-
         $maskProgressBar = $this->symfonyStyle->createProgressBar($maskCollection->count());
 
         $unusedMasks = [];

@@ -50,9 +50,15 @@ final class ContainerFactory
             return $phpParserFactory->createForHostVersion();
         });
 
+        // silence in PHPUnit tests to keep output clear
+        $consoleOutput = new ConsoleOutput();
+        $consoleOutput->setVerbosity(
+            defined('PHPUNIT_COMPOSER_INSTALL') ? ConsoleOutput::VERBOSITY_QUIET : ConsoleOutput::VERBOSITY_NORMAL
+        );
+
         $container->singleton(
             SymfonyStyle::class,
-            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), new ConsoleOutput())
+            static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), $consoleOutput)
         );
 
         return $container;
