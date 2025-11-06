@@ -43,7 +43,6 @@ final readonly class UnusedDefinitionsAnalyzer
         $this->maskCollectionStatsPrinter->printStats($maskCollection);
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
-
         $maskProgressBar = $this->symfonyStyle->createProgressBar($maskCollection->count());
 
         $unusedMasks = [];

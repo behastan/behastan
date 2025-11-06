@@ -21,13 +21,13 @@ final class UnusedDefinitionsAnalyzerTest extends AbstractTestCase
 
     public function test(): void
     {
-        $featureFiles = BehatMetafilesFinder::findFeatureFiles([__DIR__ . '/Fixture']);
-        $contextFiles = BehatMetafilesFinder::findContextFiles([__DIR__ . '/Fixture']);
+        $featureFiles = BehatMetafilesFinder::findFeatureFiles([__DIR__ . '/Fixture/Features']);
+        $this->assertCount(1, $featureFiles);
 
-        $unusedDefinitions = $this->unusedDefinitionsAnalyzer->analyse(
-            $featureFiles,
-            $contextFiles
-        );
+        $contextFiles = BehatMetafilesFinder::findContextFiles([__DIR__ . '/Fixture/Contexts']);
+        $this->assertCount(1, $contextFiles);
+
+        $unusedDefinitions = $this->unusedDefinitionsAnalyzer->analyse($contextFiles, $featureFiles);
 
         $this->assertCount(0, $unusedDefinitions);
     }
