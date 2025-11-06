@@ -15,6 +15,7 @@ use Rector\Behastan\ValueObject\Mask\RegexMask;
 use Rector\Behastan\ValueObject\Mask\SkippedMask;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Behastan\Tests\Analyzer\UnusedDefinitionsAnalyzer\UnusedDefinitionsAnalyzerTest
@@ -42,7 +43,18 @@ final readonly class UnusedDefinitionsAnalyzer
      */
     public function analyse(array $contextFiles, array $featureFiles): array
     {
+        Assert::allIsInstanceOf($contextFiles, SplFileInfo::class);
+        foreach ($contextFiles as $contextFile) {
+            Assert::endsWith($contextFile->getFilename(), '.php');
+        }
+
+        Assert::allIsInstanceOf($featureFiles, SplFileInfo::class);
+        foreach ($featureFiles as $featureFile) {
+            Assert::endsWith($featureFile->getFilename(), '.feature');
+        }
+
         $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
+
         $this->maskCollectionStatsPrinter->printStats($maskCollection);
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
