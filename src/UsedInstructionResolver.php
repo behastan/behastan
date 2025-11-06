@@ -23,7 +23,8 @@ final class UsedInstructionResolver
 
         foreach ($featureFileInfos as $featureFileInfo) {
             $matches = Strings::matchAll(
-                $featureFileInfo->getContents(),
+                // newline is needed, as file can end with no \n
+                $featureFileInfo->getContents() . PHP_EOL,
                 '#\s+(Given|When|And|Then)\s+(?<instruction>.*?)\n#m',
             );
 
