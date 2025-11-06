@@ -8,6 +8,9 @@ use Nette\Utils\Strings;
 use RuntimeException;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @see \Rector\Behastan\Tests\UsedInstructionResolver\UsedInstructionResolverTest
+ */
 final class UsedInstructionResolver
 {
     /**
