@@ -19,4 +19,9 @@ final class AnotherBehatContext
     public function deadAction(): void
     {
     }
+
+    #[Then('Do this and \/ that')]
+    public function trickyAction(): void
+    {
+    }
 }

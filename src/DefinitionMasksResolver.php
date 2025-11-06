@@ -18,6 +18,9 @@ use Rector\Behastan\ValueObject\Mask\SkippedMask;
 use Rector\Behastan\ValueObject\MaskCollection;
 use SplFileInfo;
 
+/**
+ * @see \Rector\Behastan\Tests\DefinitionMasksResolver\DefinitionMasksResolverTest
+ */
 final readonly class DefinitionMasksResolver
 {
     public function __construct(
@@ -75,6 +78,9 @@ final readonly class DefinitionMasksResolver
                 );
                 continue;
             }
+
+            // remove \/ escape from mask
+            $rawMask = str_replace('\/', '/', $rawMask);
 
             $masks[] = new ExactMask(
                 $rawMask,
