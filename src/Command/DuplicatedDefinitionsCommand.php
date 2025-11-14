@@ -53,6 +53,33 @@ final class DuplicatedDefinitionsCommand extends Command
             $contextFileInfos
         );
 
+        // 1. find duplicated masks, e.g. if 2 methods have the same mask, its a race condition problem
+        $classMethodContextDefinitions = $this->classMethodContextDefinitionsAnalyzer->resolve($contextFileInfos);
+        $groupedByMask = [];
+        foreach ($classMethodContextDefinitions as $classMethodContextDefinition) {
+            $groupedByMask[$classMethodContextDefinition->getMask()][] = $classMethodContextDefinition;
+        }
+
+        foreach ($groupedByMask as $mask => $sameMaksClassMethodContextDefinitions) {
+            if (count($sameMaksClassMethodContextDefinitions) === 1) {
+                continue;
+            }
+
+            // two or more methods have the same mask
+            $this->symfonyStyle->section('Duplicated mask: "' . $mask . '"');
+            foreach ($sameMaksClassMethodContextDefinitions as $classMethodContextDefinition) {
+                $relativeFilePath = substr(
+                    $classMethodContextDefinition->getFilePath(),
+                    strlen((string) $testDirectories[0]) + 1
+                );
+                $this->symfonyStyle->writeln($relativeFilePath . ':' . $classMethodContextDefinition->getMethodLine());
+            }
+
+            $this->symfonyStyle->newLine();
+        }
+
+        // 2. find duplicate method contents
+
         // keep only duplicated
         $classMethodContextDefinitionByClassMethodHash = $this->filterOutNotDuplicated(
             $classMethodContextDefinitionByClassMethodHash
