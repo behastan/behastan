@@ -40,6 +40,8 @@ final class AnalyzeCommand extends Command
     protected function configure(): void
     {
         $this->setName('analyze');
+        $this->setAliases(['analyse']);
+
         $this->setDescription('Run complete static analysis on Behat definitions and features');
 
         $this->addArgument(
@@ -65,7 +67,7 @@ final class AnalyzeCommand extends Command
         $contextFileInfos = BehatMetafilesFinder::findContextFiles([$testDirectory]);
         if ($contextFileInfos === []) {
             $this->symfonyStyle->error(sprintf(
-                'No *.Context files found in "%s". Please provide correct test directory',
+                'No *.Context files found in "%s". Please provide correct directory',
                 $testDirectory
             ));
             return self::FAILURE;
@@ -74,11 +76,13 @@ final class AnalyzeCommand extends Command
         $featureFileInfos = BehatMetafilesFinder::findFeatureFiles([$testDirectory]);
         if ($featureFileInfos === []) {
             $this->symfonyStyle->error(sprintf(
-                'No *.feature files found in "%s". Please provide correct test directory',
+                'No *.feature files found in "%s". Please provide correct directory',
                 $testDirectory
             ));
             return self::FAILURE;
         }
+
+        $skips = $input->getOption('skip');
 
         $this->symfonyStyle->writeln(sprintf(
             '<fg=green>Found %d Context and %d feature files</>',
@@ -91,21 +95,26 @@ final class AnalyzeCommand extends Command
         $this->symfonyStyle->newLine();
 
         $this->maskCollectionStatsPrinter->print($maskCollection);
-
         $this->symfonyStyle->newLine();
 
-        // @todo skip by "--skip" option
-
         $this->symfonyStyle->writeln('<fg=yellow>Running analysis...</>');
+        $this->symfonyStyle->newLine();
 
         /** @var RuleError[] $allRuleErrors */
         $allRuleErrors = [];
         foreach ($this->rules as $rule) {
+            if ($skips !== [] && in_array($rule->getIdentifier(), $skips, true)) {
+                $this->symfonyStyle->writeln(sprintf('<fg=cyan>Skipping "%s" rule</>', $rule->getIdentifier()));
+                $this->symfonyStyle->newLine();
+                continue;
+            }
+
             $ruleErrors = $rule->process($contextFileInfos, $featureFileInfos, $maskCollection, $testDirectory);
             $allRuleErrors = array_merge($allRuleErrors, $ruleErrors);
         }
 
         if ($allRuleErrors === []) {
+            $this->symfonyStyle->newLine(2);
             $this->symfonyStyle->success('No errors found. Good job!');
 
             return self::SUCCESS;

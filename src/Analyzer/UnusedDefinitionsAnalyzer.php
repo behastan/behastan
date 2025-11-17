@@ -6,7 +6,6 @@ namespace Rector\Behastan\Analyzer;
 
 use Nette\Utils\Strings;
 use Rector\Behastan\DefinitionMasksExtractor;
-use Rector\Behastan\Reporting\MaskCollectionStatsPrinter;
 use Rector\Behastan\UsedInstructionResolver;
 use Rector\Behastan\ValueObject\Mask\AbstractMask;
 use Rector\Behastan\ValueObject\Mask\ExactMask;
@@ -32,7 +31,6 @@ final readonly class UnusedDefinitionsAnalyzer
         private SymfonyStyle $symfonyStyle,
         private UsedInstructionResolver $usedInstructionResolver,
         private DefinitionMasksExtractor $definitionMasksExtractor,
-        private MaskCollectionStatsPrinter $maskCollectionStatsPrinter,
     ) {
     }
 
@@ -55,7 +53,6 @@ final readonly class UnusedDefinitionsAnalyzer
         }
 
         $maskCollection = $this->definitionMasksExtractor->extract($contextFiles);
-        $this->maskCollectionStatsPrinter->print($maskCollection);
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
         $maskProgressBar = $this->symfonyStyle->createProgressBar($maskCollection->count());

@@ -6,6 +6,7 @@ namespace Rector\Behastan\Rule;
 
 use Rector\Behastan\Analyzer\ContextDefinitionsAnalyzer;
 use Rector\Behastan\Contract\RuleInterface;
+use Rector\Behastan\Enum\RuleIdentifier;
 use Rector\Behastan\ValueObject\ContextDefinition;
 use Rector\Behastan\ValueObject\MaskCollection;
 use Rector\Behastan\ValueObject\RuleError;
@@ -58,5 +59,10 @@ final readonly class DuplicatedMaskRule implements RuleInterface
         }
 
         return $ruleErrors;
+    }
+
+    public function getIdentifier(): string
+    {
+        return RuleIdentifier::DUPLICATED_MASKS;
     }
 }

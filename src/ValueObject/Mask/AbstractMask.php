@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Behastan\ValueObject\Mask;
 
 use Rector\Behastan\Contract\MaskInterface;

@@ -14,25 +14,32 @@ composer require behastan/behastan --dev
 
 ## Features
 
-## 1. Find duplicated definitions
+### 1. Find duplicated definitions contents
 
-Some definitions have very similar masks, but even identical contents. Better use a one definitions with exact mask, to make your tests more precise and easier to maintain:
+* identifier: `duplicated-contents`
 
-```bash
-vendor/bin/behastan analyze
-```
-
+Some definitions have similar masks, even identical contents. Better use a one definitions with exact mask, to make your tests more precise and easier to maintain:
 
 <br>
 
-## 2. Find unused Behat definitions with static analysis
+### 2. Find duplicate masks
+
+* identifier: `duplicated-masks`
+
+Same as services, there should be no 2 same definition masks. Make them unique with different behavior, or merge them and use one definition instead.
+
+<br>
+
+### 3. Find unused Behat definitions with static analysis
+
+* identifier: `unused-definitions`
 
 Behat uses `@When()`, `@Then()` and `@Given()` annotations and their PHP 8 attribute alternatives to define method to be called in `*.feature` files. Sometimes test change and lines from `*.feature` files are deleted. But what about definitions?
 
 This command helps you to spot definitions that are no longer needed. Just provide test directory (1 or more) and let it statically compare defined and used masks:
 
 ```bash
-vendor/bin/behastan unused-definitions tests
+vendor/bin/behastan analyze tests
 ```
 
 ↓

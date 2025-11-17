@@ -6,6 +6,7 @@ namespace Rector\Behastan\Rule;
 
 use Rector\Behastan\Analyzer\ContextDefinitionsAnalyzer;
 use Rector\Behastan\Contract\RuleInterface;
+use Rector\Behastan\Enum\RuleIdentifier;
 use Rector\Behastan\ValueObject\MaskCollection;
 use Rector\Behastan\ValueObject\RuleError;
 use Symfony\Component\Finder\SplFileInfo;
@@ -57,6 +58,11 @@ final readonly class DuplicatedContextDefinitionContentsRule implements RuleInte
         }
 
         return $ruleErrors;
+    }
+
+    public function getIdentifier(): string
+    {
+        return RuleIdentifier::DUPLICATED_CONTENTS;
     }
 
     /**
