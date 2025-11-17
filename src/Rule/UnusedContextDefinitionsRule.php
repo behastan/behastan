@@ -6,6 +6,7 @@ namespace Rector\Behastan\Rule;
 
 use Rector\Behastan\Analyzer\UnusedDefinitionsAnalyzer;
 use Rector\Behastan\Contract\RuleInterface;
+use Rector\Behastan\Enum\RuleIdentifier;
 use Rector\Behastan\ValueObject\MaskCollection;
 use Rector\Behastan\ValueObject\RuleError;
 use Symfony\Component\Finder\SplFileInfo;
@@ -42,5 +43,10 @@ final readonly class UnusedContextDefinitionsRule implements RuleInterface
         }
 
         return $ruleErrors;
+    }
+
+    public function getIdentifier(): string
+    {
+        return RuleIdentifier::UNUSED_DEFINITIONS;
     }
 }

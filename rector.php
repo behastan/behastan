@@ -16,7 +16,8 @@ return RectorConfig::configure()
         codingStyle: true,
         instanceOf: true,
         phpunitCodeQuality: true,
-        naming: true
+        naming: true,
+        rectorPreset: true,
     )
     ->withImportNames()
     ->withSkip(['*/scoper.php', '*/Source/*', '*/Fixture/*']);
