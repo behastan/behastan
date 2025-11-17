@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Behastan\ValueObject;
 
-final class ClassMethodContextDefinition
+final class ContextDefinition
 {
     private int $usageCount = 0;
 

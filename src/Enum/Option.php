@@ -9,5 +9,5 @@ final class Option
     /**
      * @var string
      */
-    public const TEST_DIRECTORY = 'test-directory';
+    public const PROJECT_DIRECTORY = 'test-directory';
 }

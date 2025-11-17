@@ -16,13 +16,8 @@ final class BehatMetafilesFinder
      */
     public static function findContextFiles(array $directories): array
     {
-        Assert::allString($directories);
-        Assert::allDirectory($directories);
-
-        $filesFinder = Finder::create()
-            ->files()
-            ->name('*Context.php')
-            ->in($directories);
+        $filesFinder = self::createFinder($directories)
+            ->name('*Context.php');
 
         return iterator_to_array($filesFinder->getIterator());
     }
@@ -33,14 +28,26 @@ final class BehatMetafilesFinder
      */
     public static function findFeatureFiles(array $directories): array
     {
+        $filesFinder = self::createFinder($directories)
+            ->name('*.feature');
+
+        return iterator_to_array($filesFinder->getIterator());
+    }
+
+    /**
+     * @param string[] $directories
+     */
+    private static function createFinder(array $directories): Finder
+    {
         Assert::allString($directories);
         Assert::allDirectory($directories);
 
-        $filesFinder = Finder::create()
+        return Finder::create()
             ->files()
-            ->name('*.feature')
+            ->notPath('vendor')
+            ->notPath('node_modules')
+            // test data
+            ->notPath('Fixture')
             ->in($directories);
-
-        return iterator_to_array($filesFinder->getIterator());
     }
 }

@@ -7,13 +7,19 @@ namespace Rector\Behastan\DependencyInjection;
 use Illuminate\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use Rector\Behastan\Analyzer\ContextDefinitionsAnalyzer;
+use Rector\Behastan\Command\AnalyzeCommand;
 use Rector\Behastan\Command\DuplicatedDefinitionsCommand;
-use Rector\Behastan\Command\StatsCommand;
 use Rector\Behastan\Command\UnusedDefinitionsCommand;
+use Rector\Behastan\Contract\RuleInterface;
+use Rector\Behastan\Rule\DuplicatedContextDefinitionContentsRule;
+use Rector\Behastan\Rule\DuplicatedMaskRule;
+use Rector\Behastan\Rule\UnusedContextDefinitionsRule;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Webmozart\Assert\Assert;
 
 final class ContainerFactory
 {
@@ -26,13 +32,13 @@ final class ContainerFactory
 
         // console
         $container->singleton(Application::class, function (Container $container): Application {
-            $application = new Application('Behastan');
+            $application = new Application('Behastan', '0.4');
 
             // register commands
             foreach ([
                 DuplicatedDefinitionsCommand::class,
                 UnusedDefinitionsCommand::class,
-                StatsCommand::class,
+                AnalyzeCommand::class,
             ] as $commandClass) {
                 $command = $container->make($commandClass);
                 $application->add($command);
@@ -50,6 +56,9 @@ final class ContainerFactory
             return $phpParserFactory->createForHostVersion();
         });
 
+        // to re-use
+        $container->singleton(ContextDefinitionsAnalyzer::class);
+
         // silence in PHPUnit tests to keep output clear
         $consoleOutput = new ConsoleOutput();
         $consoleOutput->setVerbosity(
@@ -60,6 +69,14 @@ final class ContainerFactory
             SymfonyStyle::class,
             static fn (): SymfonyStyle => new SymfonyStyle(new ArrayInput([]), $consoleOutput)
         );
+
+        $this->registerRule($container, DuplicatedMaskRule::class);
+        $this->registerRule($container, DuplicatedContextDefinitionContentsRule::class);
+        $this->registerRule($container, UnusedContextDefinitionsRule::class);
+
+        $container->when(AnalyzeCommand::class)
+            ->needs('$rules')
+            ->giveTagged(RuleInterface::class);
 
         return $container;
     }
@@ -74,5 +91,13 @@ final class ContainerFactory
 
         $application->get('help')
             ->setHidden();
+    }
+
+    private function registerRule(Container $container, string $ruleClass): void
+    {
+        Assert::isAOf($ruleClass, RuleInterface::class);
+
+        $container->singleton($ruleClass);
+        $container->tag($ruleClass, RuleInterface::class);
     }
 }

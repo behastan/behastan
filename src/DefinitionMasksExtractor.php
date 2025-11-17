@@ -10,7 +10,7 @@ use PhpParser\NodeFinder;
 use Rector\Behastan\Analyzer\MaskAnalyzer;
 use Rector\Behastan\PhpParser\SimplePhpParser;
 use Rector\Behastan\Resolver\ClassMethodMasksResolver;
-use Rector\Behastan\ValueObject\ClassMethodContextDefinition;
+use Rector\Behastan\ValueObject\ContextDefinition;
 use Rector\Behastan\ValueObject\Mask\ExactMask;
 use Rector\Behastan\ValueObject\Mask\NamedMask;
 use Rector\Behastan\ValueObject\Mask\RegexMask;
@@ -19,9 +19,9 @@ use Rector\Behastan\ValueObject\MaskCollection;
 use SplFileInfo;
 
 /**
- * @see \Rector\Behastan\Tests\DefinitionMasksResolver\DefinitionMasksResolverTest
+ * @see \Rector\Behastan\Tests\DefinitionMasksExtractor\DefinitionMasksExtractorTest
  */
-final readonly class DefinitionMasksResolver
+final readonly class DefinitionMasksExtractor
 {
     public function __construct(
         private SimplePhpParser $simplePhpParser,
@@ -33,7 +33,7 @@ final readonly class DefinitionMasksResolver
     /**
      * @param SplFileInfo[] $contextFiles
      */
-    public function resolve(array $contextFiles): MaskCollection
+    public function extract(array $contextFiles): MaskCollection
     {
         $masks = [];
 
@@ -96,7 +96,7 @@ final readonly class DefinitionMasksResolver
 
     /**
      * @param SplFileInfo[] $fileInfos
-     * @return ClassMethodContextDefinition[]
+     * @return ContextDefinition[]
      */
     private function resolveMasksFromFiles(array $fileInfos): array
     {
@@ -110,10 +110,12 @@ final readonly class DefinitionMasksResolver
             if (! $class instanceof Class_) {
                 continue;
             }
+
             // is magic class?
             if ($class->isAnonymous()) {
                 continue;
             }
+
             if (! $class->namespacedName instanceof Name) {
                 continue;
             }
@@ -124,7 +126,7 @@ final readonly class DefinitionMasksResolver
                 $rawMasks = $this->classMethodMasksResolver->resolve($classMethod);
 
                 foreach ($rawMasks as $rawMask) {
-                    $classMethodContextDefinitions[] = new ClassMethodContextDefinition(
+                    $classMethodContextDefinitions[] = new ContextDefinition(
                         $fileInfo->getRealPath(),
                         $className,
                         $classMethod->name->toString(),
