@@ -31,7 +31,7 @@ final class UsedInstructionResolver
             if ($matches === []) {
                 // there should be at least one instruction in each feature file
                 throw new RuntimeException(sprintf(
-                    'Unable to resolve instructions from %s file',
+                    'Unable to extract instructions from %s file',
                     $featureFileInfo->getRealPath()
                 ));
             }

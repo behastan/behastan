@@ -19,7 +19,7 @@ composer require behastan/behastan --dev
 Some definitions have very similar masks, but even identical contents. Better use a one definitions with exact mask, to make your tests more precise and easier to maintain:
 
 ```bash
-vendor/bin/behastan duplicated-definitions tests
+vendor/bin/behastan analyze
 ```
 
 

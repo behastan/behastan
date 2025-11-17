@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Behastan\Analyzer;
 
 use Nette\Utils\Strings;
-use Rector\Behastan\DefinitionMasksResolver;
+use Rector\Behastan\DefinitionMasksExtractor;
 use Rector\Behastan\Reporting\MaskCollectionStatsPrinter;
 use Rector\Behastan\UsedInstructionResolver;
 use Rector\Behastan\ValueObject\Mask\AbstractMask;
@@ -13,6 +13,7 @@ use Rector\Behastan\ValueObject\Mask\ExactMask;
 use Rector\Behastan\ValueObject\Mask\NamedMask;
 use Rector\Behastan\ValueObject\Mask\RegexMask;
 use Rector\Behastan\ValueObject\Mask\SkippedMask;
+use Rector\Behastan\ValueObject\MaskCollection;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\SplFileInfo;
 use Webmozart\Assert\Assert;
@@ -29,8 +30,8 @@ final readonly class UnusedDefinitionsAnalyzer
 
     public function __construct(
         private SymfonyStyle $symfonyStyle,
-        private DefinitionMasksResolver $definitionMasksResolver,
         private UsedInstructionResolver $usedInstructionResolver,
+        private DefinitionMasksExtractor $definitionMasksExtractor,
         private MaskCollectionStatsPrinter $maskCollectionStatsPrinter,
     ) {
     }
@@ -41,7 +42,7 @@ final readonly class UnusedDefinitionsAnalyzer
      *
      * @return AbstractMask[]
      */
-    public function analyse(array $contextFiles, array $featureFiles): array
+    public function analyse(array $contextFiles, array $featureFiles, MaskCollection $maskCollection): array
     {
         Assert::allIsInstanceOf($contextFiles, SplFileInfo::class);
         foreach ($contextFiles as $contextFile) {
@@ -53,9 +54,8 @@ final readonly class UnusedDefinitionsAnalyzer
             Assert::endsWith($featureFile->getFilename(), '.feature');
         }
 
-        $maskCollection = $this->definitionMasksResolver->resolve($contextFiles);
-
-        $this->maskCollectionStatsPrinter->printStats($maskCollection);
+        $maskCollection = $this->definitionMasksExtractor->extract($contextFiles);
+        $this->maskCollectionStatsPrinter->print($maskCollection);
 
         $featureInstructions = $this->usedInstructionResolver->resolveInstructionsFromFeatureFiles($featureFiles);
         $maskProgressBar = $this->symfonyStyle->createProgressBar($maskCollection->count());
