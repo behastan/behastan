@@ -12,7 +12,23 @@ Find unused and duplicated definitions easily &ndash; without running Behat test
 composer require behastan/behastan --dev
 ```
 
-## Features
+## Usage
+
+```bash
+vendor/bin/behastan analyse tests
+```
+
+<br>
+
+Do you want to skip some rule? You can:
+
+```bash
+vendor/bin/behastan analyse tests --skip=<rule-identifier>
+```
+
+<br>
+
+Here are the available rules:
 
 ### 1. Find duplicated definitions contents
 
@@ -34,40 +50,27 @@ Same as services, there should be no 2 same definition masks. Make them unique w
 
 * identifier: `unused-definitions`
 
-Behat uses `@When()`, `@Then()` and `@Given()` annotations and their PHP 8 attribute alternatives to define method to be called in `*.feature` files. Sometimes test change and lines from `*.feature` files are deleted. But what about definitions?
+Behat uses `@When()`, `@Then()` and `@Given()` annotations or attributes to define a class method that is  called in `*.feature` files. Sometimes test change and lines from `*.feature` files are deleted. But what about definitions?
 
-This command helps you to spot definitions that are no longer needed. Just provide test directory (1 or more) and let it statically compare defined and used masks:
+This rule spots definitions that are no longer needed.
 
-```bash
-vendor/bin/behastan analyze tests
-```
+<br>
 
-↓
+## Output example
 
 ```bash
-Checking static, named and regex masks from 100 *Feature files
-==============================================================
+Found 127 Context and 225 feature files
+Extracting definitions masks...
 
-Found 1036 masks:
+Found 1367 masks:
+ * 863 exact
+ * 204 /regex/
+ * 298 :named
 
- * 747 exact
- * 106 /regex/
- * 181 :named
-
- 1036/1036 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
-
-the product price is :value
-tests/Behat/ProductContext.php
-
-/^I submit order form and see payment page$/
-tests/Behat/OrderContext.php
-
-
- [ERROR] Found 2 unused definitions
+Running analysis...
 ```
 
-You can also add this command to CI, to get instant feedback about unused definitions.
-
+Add this command to CI, to get instant feedback of any changes.
 
 That's it!
 
