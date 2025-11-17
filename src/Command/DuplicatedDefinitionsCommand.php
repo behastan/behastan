@@ -7,6 +7,7 @@ namespace Rector\Behastan\Command;
 use Rector\Behastan\Analyzer\ClassMethodContextDefinitionsAnalyzer;
 use Rector\Behastan\Enum\Option;
 use Rector\Behastan\Finder\BehatMetafilesFinder;
+use Rector\Behastan\ValueObject\ClassMethodContextDefinition;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,10 +50,6 @@ final class DuplicatedDefinitionsCommand extends Command
             return self::FAILURE;
         }
 
-        $classMethodContextDefinitionByClassMethodHash = $this->classMethodContextDefinitionsAnalyzer->resolveAndGroupByContentHash(
-            $contextFileInfos
-        );
-
         // 1. find duplicated masks, e.g. if 2 methods have the same mask, its a race condition problem
         $classMethodContextDefinitions = $this->classMethodContextDefinitionsAnalyzer->resolve($contextFileInfos);
         $groupedByMask = [];
@@ -79,39 +76,14 @@ final class DuplicatedDefinitionsCommand extends Command
         }
 
         // 2. find duplicate method contents
-
-        // keep only duplicated
-        $classMethodContextDefinitionByClassMethodHash = $this->filterOutNotDuplicated(
-            $classMethodContextDefinitionByClassMethodHash
+        $classMethodContextDefinitionByClassMethodHash = $this->classMethodContextDefinitionsAnalyzer->resolveAndGroupByContentHash(
+            $contextFileInfos
         );
 
-        $i = 0;
-        foreach ($classMethodContextDefinitionByClassMethodHash as $classMethodContextDefinition) {
-            $this->symfonyStyle->section(sprintf('%d)', $i + 1));
-
-            foreach ($classMethodContextDefinition as $classAndMethod) {
-                $relativeFilePath = substr(
-                    $classAndMethod->getFilePath(),
-                    strlen((string) $testDirectories[0]) + 1
-                );
-
-                $this->symfonyStyle->writeln($relativeFilePath . ':' . $classAndMethod->getMethodLine());
-
-                $this->symfonyStyle->writeln('Mask: <fg=green>"' . $classAndMethod->getMask() . '"</>');
-                $this->symfonyStyle->newLine();
-            }
-
-            $this->symfonyStyle->newLine();
-            ++$i;
-        }
-
-        $this->symfonyStyle->error(
-            sprintf('Found %d duplicated class method contents', count(
-                $classMethodContextDefinitionByClassMethodHash
-            ))
+        return $this->reportDuplicateMethodBodyContents(
+            $classMethodContextDefinitionByClassMethodHash,
+            $testDirectories[0]
         );
-
-        return Command::FAILURE;
     }
 
     /**
@@ -129,5 +101,49 @@ final class DuplicatedDefinitionsCommand extends Command
         }
 
         return $items;
+    }
+
+    /**
+     * @param array<string, ClassMethodContextDefinition[]> $classMethodContextDefinitionByClassMethodHash
+     */
+    private function reportDuplicateMethodBodyContents(
+        array $classMethodContextDefinitionByClassMethodHash,
+        string $testDirectory
+    ): int {
+        // keep only duplicated
+        $classMethodContextDefinitionByClassMethodHash = $this->filterOutNotDuplicated(
+            $classMethodContextDefinitionByClassMethodHash
+        );
+
+        if ($classMethodContextDefinitionByClassMethodHash === []) {
+            return self::SUCCESS;
+        }
+
+        $i = 0;
+        foreach ($classMethodContextDefinitionByClassMethodHash as $classMethodContextDefinition) {
+            $this->symfonyStyle->writeln(str_repeat('-', 80));
+            $this->symfonyStyle->newLine();
+
+            foreach ($classMethodContextDefinition as $classAndMethod) {
+                $relativeFilePath = substr($classAndMethod->getFilePath(), strlen((string) $testDirectory) + 1);
+
+                $this->symfonyStyle->writeln('Mask: <fg=green>"' . $classAndMethod->getMask() . '"</>');
+                $this->symfonyStyle->writeln($relativeFilePath . ':' . $classAndMethod->getMethodLine());
+
+                $this->symfonyStyle->newLine();
+            }
+
+            ++$i;
+        }
+
+        $this->symfonyStyle->newLine();
+
+        $this->symfonyStyle->error(
+            sprintf('Found %d definitions with different masks, but same method body', count(
+                $classMethodContextDefinitionByClassMethodHash
+            ))
+        );
+
+        return self::FAILURE;
     }
 }

@@ -8,7 +8,6 @@ use Illuminate\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Rector\Behastan\Command\DuplicatedDefinitionsCommand;
-use Rector\Behastan\Command\StatsCommand;
 use Rector\Behastan\Command\UnusedDefinitionsCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -29,11 +28,7 @@ final class ContainerFactory
             $application = new Application('Behastan');
 
             // register commands
-            foreach ([
-                DuplicatedDefinitionsCommand::class,
-                UnusedDefinitionsCommand::class,
-                StatsCommand::class,
-            ] as $commandClass) {
+            foreach ([DuplicatedDefinitionsCommand::class, UnusedDefinitionsCommand::class] as $commandClass) {
                 $command = $container->make($commandClass);
                 $application->add($command);
             }
