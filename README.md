@@ -108,21 +108,7 @@ This rule spots definitions that are no longer needed, so you can  remove them.
 
 <br>
 
-## Output example
-
-```bash
-Found 127 Context and 225 feature files
-Extracting definitions masks...
-
-Found 1367 masks:
- * 863 exact
- * 204 /regex/
- * 298 :named
-
-Running analysis...
-```
-
-Add this command to CI, to get instant feedback of any changes.
+*Protip*: Add this command to your CI, to get instant feedback of any changes in every pull-request.
 
 That's it!
 
