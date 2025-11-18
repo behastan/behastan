@@ -34,7 +34,25 @@ Here are the available rules:
 
 * identifier: `duplicated-contents`
 
-Some definitions have similar masks, even identical contents. Better use a one definitions with exact mask, to make your tests more precise and easier to maintain:
+Some definitions have similar masks, even identical contents:
+
+```php
+use Behat\Step\When;
+
+#[When('load a user profile')]
+public function loadAUserProfile()
+{
+    $this->loadRoute('/user-profile');
+}
+
+#[When('load user profile')]
+public function loadUserProfile()
+{
+    $this->loadRoute('/user-profile');
+}
+```
+
+Better use a one definition with single mask, to make your tests more precise and easier to maintain.
 
 <br>
 
@@ -42,7 +60,25 @@ Some definitions have similar masks, even identical contents. Better use a one d
 
 * identifier: `duplicated-masks`
 
-Same as services, there should be no 2 same definition masks. Make them unique with different behavior, or merge them and use one definition instead.
+Same as services, there should be unique definition masks:
+
+```php
+use Behat\Step\When;
+
+#[When('load homepage')]
+public function loadUserProfile()
+{
+    $this->loadRoute('/homepage');
+}
+
+#[When('load homepage')]
+public function loadUserProfile()
+{
+    $this->loadRoute('/homepage/default');
+}
+```
+
+Make them unique with different behavior, or merge them and use one definition instead.
 
 <br>
 
@@ -52,7 +88,26 @@ Same as services, there should be no 2 same definition masks. Make them unique w
 
 Behat uses `@When()`, `@Then()` and `@Given()` annotations or attributes to define a class method that is  called in `*.feature` files. Sometimes test change and lines from `*.feature` files are deleted. But what about definitions?
 
-This rule spots definitions that are no longer needed.
+```diff
+# some *.feature file
+ Scenario: Load admin dashboard
+-  When load admin dashboard
++  When load homepage
+```
+
+↓
+
+```php
+use Behat\Step\When;
+
+#[When('load admin dashboard')]
+public function loadAdminDashboard()
+{
+    $this->loadRoute('/admin/dashboard');
+}
+```
+
+This rule spots definitions that are no longer needed, so you can  remove them.
 
 <br>
 
