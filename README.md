@@ -24,15 +24,16 @@ Do you want to skip some rule? You can:
 
 ```bash
 vendor/bin/behastan analyse tests --skip=<rule-identifier>
+
+# e.g.
+vendor/bin/behastan analyse tests --skip=duplicated-contents
 ```
 
 <br>
 
 Here are the available rules:
 
-### 1. Find duplicated definitions contents
-
-* identifier: `duplicated-contents`
+### 1. Find duplicated definitions contents (`duplicated-contents`)
 
 Some definitions have similar masks, even identical contents:
 
@@ -56,9 +57,7 @@ Better use a one definition with single mask, to make your tests more precise an
 
 <br>
 
-### 2. Find duplicate masks
-
-* identifier: `duplicated-masks`
+### 2. Find duplicated masks (`duplicated-masks`)
 
 Same as services, there should be unique definition masks:
 
@@ -82,9 +81,7 @@ Make them unique with different behavior, or merge them and use one definition i
 
 <br>
 
-### 3. Find unused Behat definitions with static analysis
-
-* identifier: `unused-definitions`
+### 3. Find unused definitions (`unused-definitions`)
 
 Behat uses `@When()`, `@Then()` and `@Given()` annotations or attributes to define a class method that is  called in `*.feature` files. Sometimes test change and lines from `*.feature` files are deleted. But what about definitions?
 
